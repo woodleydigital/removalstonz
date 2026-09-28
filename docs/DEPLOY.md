@@ -41,14 +41,26 @@ mailbox (register item V-02) depends on this.
 ## 3. What `vercel.json` sets
 
 - `trailingSlash: true`, so `/uk` 308s to `/uk/` and every URL has one form.
-- `*.vercel.app` hosts get `X-Robots-Tag: noindex, nofollow`, so preview and
-  default deployments never compete with the real domain.
+- `*.vercel.app` hosts and `staging.removalstonz.com` get
+  `X-Robots-Tag: noindex, nofollow`, so previews and staging never compete
+  with the real domain.
 - Immutable one-year caching for the content-hashed `/css/`, `/js/` and `/img/`.
 - Security headers: HSTS, `nosniff`, `SAMEORIGIN`, a strict referrer policy and
   a permissions policy.
 
 There is **no geo-redirect** and there must never be one — see
 [`INTERNATIONAL-SEO.md`](./INTERNATIONAL-SEO.md), section 1.
+
+## 3a. Staging
+
+Every branch pushed to GitHub gets a Vercel preview deployment once the
+project is imported. For a stable staging address, assign
+`staging.removalstonz.com` to the staging branch (Settings → Domains → add the
+domain → *Git Branch*). It is noindexed by `vercel.json`, and the enquiry
+frame works there with no IMC change, because IMC allows `*.removalstonz.com`
+to frame the form. A bare `*.vercel.app` preview URL shows the site but not
+the form, unless that exact origin is added to IMC's `EMBED_FRAME_ANCESTORS`
+(see [`LEAD-FORM.md`](./LEAD-FORM.md)).
 
 ## 4. After the first deploy
 

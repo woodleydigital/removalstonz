@@ -12,7 +12,7 @@
       "has": [
         {
           "type": "host",
-          "value": ".*\\.vercel\\.app"
+          "value": "(.*\\.vercel\\.app|staging\\.removalstonz\\.com)"
         }
       ],
       "headers": [
