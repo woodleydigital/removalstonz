@@ -233,7 +233,7 @@ export const getAQuote = {
   path: R.quote,
   template: 'quote',
   noindex: true,
-  title: 'Get a Quote for Removals to New Zealand | Removals to NZ',
+  title: 'Plan Your Move to New Zealand | Removals to NZ',
   h1: 'Get your New Zealand removals quote',
   lede: 'Tell us where you are moving from and five short things about the move, and a move consultant replies with a written estimate.',
   description: 'Request a written quote for removals to New Zealand from the UK, USA, Australia, Canada or Europe.',
@@ -252,33 +252,6 @@ export const getAQuote = {
         { title: 'A survey', body: 'By video or in person for anything bigger than a few boxes. No household move can be priced accurately from a form.' },
         { title: 'An itemised quote', body: 'Origin charges, freight and New Zealand destination charges shown separately, with exclusions listed.' }
       ]
-    }
-  ]
-};
-
-export const thankYou = {
-  path: R.thankYou,
-  template: 'page',
-  noindex: true,
-  title: 'Thank you — we have your quote request | Removals to NZ',
-  h1: 'Thank you — your request is with our move team',
-  lede: 'We have your details, and a consultant who handles your route will reply in writing, usually within one working day.',
-  description: 'Your New Zealand removals quote request has been received.',
-  crumbs: c({ href: R.thankYou, label: 'Thank you' }),
-  blocks: [
-    { type: 'h2', text: 'While you wait' },
-    {
-      type: 'ul',
-      items: [
-        `Check your junk folder — our reply comes from ${CONTACT.email}.`,
-        'Have your visa or residence status to hand. It affects the customs concession on your goods and the timing of the move.',
-        '[Work out your shipment volume](/tools/moving-volume-calculator/) if you have not already; it makes the survey much quicker.',
-        'Read [what you cannot bring into New Zealand](/guides/new-zealand-biosecurity-what-you-cannot-bring/) before you start sorting.'
-      ]
-    },
-    {
-      type: 'p',
-      text: `If something is urgent, email [${CONTACT.email}](mailto:${CONTACT.email}) and mention that you have already sent a quote request.`
     }
   ]
 };
@@ -421,14 +394,18 @@ export const legal = {
         ? `${OPERATOR.legalName || `${OPERATOR.name} (${OPERATOR.shortName})`}${OPERATOR.companyNumber ? `, company number ${OPERATOR.companyNumber}` : ''}${OPERATOR.registeredAddress ? `, ${OPERATOR.registeredAddress}` : ''}, is responsible for personal data collected through this site.`
         : 'The registered company responsible for personal data collected through this site will be named here, with its registration number and address, before the quote form goes live.'
     },
-    { type: 'h2', text: 'What we collect and why' },
+    { type: 'h2', text: 'The enquiry form' },
     {
       type: 'p',
-      text: 'The quote form collects your name, email address, optionally a phone number, where you are moving from and to, the rough size and timing of the move, and anything you choose to tell us in the notes. We use these details only to prepare and send your quote and to arrange a survey if you want one.'
+      text: 'The enquiry form on this site is International Moving Company\'s own form, shown in a frame from internationalmoving.company. What you type into it goes straight to IMC, not to this site: your origin and destination, move date and size, any item list and notes, and your name, phone number and email address. IMC uses those details to prepare your quote and get back to you. [IMC\'s privacy policy](https://internationalmoving.company/privacy-policy/) explains how they are handled and kept.'
     },
     {
       type: 'p',
-      text: 'We do not sell your details, and we do not add you to marketing lists without asking. To price a move, your details may be shared with the partner carrying out the packing in your country and the one handling delivery in New Zealand, who use them only for your move.'
+      text: 'The form also tells IMC which page of this site you were on and which country section it belonged to, so your enquiry reaches the right person. This site itself sets no cookies and stores nothing you type. If you use the "Moving from" suggestion, the only thing it remembers is that you dismissed it, in your own browser.'
+    },
+    {
+      type: 'p',
+      text: 'We do not sell your details, and we do not add you to marketing lists without asking.'
     },
     { type: 'h2', text: 'Your rights' },
     {

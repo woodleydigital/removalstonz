@@ -415,80 +415,20 @@ figcaption { font-size: .89rem; color: var(--muted); padding-top: .55rem; }
 .faq details[open] summary { margin-bottom: .7rem; }
 .faq p { color: var(--slate); }
 
-/* ---------- Lead form (CRO) ---------- */
-/* IMC enquiry panel: white, hairline border, 4px teal top rule, soft navy shadow. */
-.lead {
-  background: #fff; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
-  padding: 1.5rem 1.35rem 1.25rem; border: 1px solid #dce4e2; border-top: 4px solid var(--teal);
-  /* The panel can sit on the dark hero, so it sets its own colour rather than
-     inheriting white text onto a white background. */
-  color: var(--ink);
-}
-@media (min-width: 700px) { .lead { padding: 1.75rem 1.85rem 1.4rem; } }
-.lead h2, .lead h3, .lead legend, .lead label { color: var(--ink); }
-.lead__head { margin-bottom: 1rem; }
-.lead__head .eyebrow { margin-bottom: .75rem; font-size: .72rem; }
-.lead__head h2, .lead__head h3 {
-  margin: 0 0 .35rem; font-family: var(--font); font-weight: 600;
-  font-size: 1.55rem; line-height: 1.25; letter-spacing: -.02em;
-}
-.lead__sub { font-size: .875rem; color: var(--slate); margin: 0; }
-.field { margin-bottom: .9rem; }
-.field > label, .fieldset__legend {
-  display: block; font-weight: 700; font-size: .875rem; margin-bottom: .35rem;
-}
-.fieldset__legend { font-size: 1.05rem; font-weight: 600; margin-bottom: .7rem; }
-.field__hint { display: block; font-weight: 400; font-size: .8rem; color: var(--slate); margin-top: .1rem; }
-.field input[type="text"], .field input[type="email"], .field input[type="tel"],
-.field input[type="number"], .field input[type="date"], .field select, .field textarea {
-  width: 100%; font: inherit; font-size: 1rem; color: var(--ink);
-  padding: .7rem .8rem; border: 1px solid var(--input); border-radius: 3px;
-  background: #fff; min-height: 46px;
-}
-.field textarea { min-height: 96px; resize: vertical; }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--teal); outline: 2px solid var(--teal); outline-offset: 0; }
-.field input:user-invalid, .field select:user-invalid { border-color: #b3261e; }
-
+/* ---------- Enquiry form: IMC's own, embedded ----------
+   The frame's document carries IMC's enquiry-panel styling (white, teal top
+   rule), so the wrapper here adds none. The frame reserves the form's
+   measured first-step height — 580px at phone widths, a little less wider —
+   so nothing shifts when it loads; app.js then sizes it to each step. */
+.lead--embed { background: none; border: 0; box-shadow: none; padding: 0; color: var(--ink); }
+.lead__frame { display: block; width: 100%; height: 580px; border: 0; background: transparent; color-scheme: light; }
+.lead__fallback { font-size: .8rem; line-height: 1.5; color: var(--slate); margin: .7rem 0 0; }
+.hero .lead__fallback { color: rgba(255, 255, 255, .72); }
+.hero .lead__fallback a { color: #fff; }
+.lead-block { margin: 2.75rem 0; max-width: 560px; }
+.lead--embed { max-width: 560px; }
 fieldset { border: 0; margin: 0 0 .85rem; padding: 0; }
 legend { padding: 0; }
-
-/* Segmented radio group — large tap targets */
-.choices { display: grid; gap: .5rem; grid-template-columns: repeat(2, 1fr); }
-.choices--3 { grid-template-columns: repeat(3, 1fr); }
-.choices--1 { grid-template-columns: 1fr; }
-.choice { position: relative; margin: 0; }
-.choice input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
-.choice span {
-  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-  min-height: 50px; padding: .6rem .85rem; border: 1px solid var(--input);
-  border-radius: var(--radius); font-size: .95rem; font-weight: 600; text-align: left;
-}
-.choice small { font-weight: 400; color: var(--slate); font-size: .8rem; }
-.choice input:checked + span { border-color: var(--teal); background: var(--brand-tint); box-shadow: inset 0 0 0 1px var(--teal); }
-.choice input:focus-visible + span { outline: 2px solid var(--teal); outline-offset: 2px; }
-
-.consent { display: flex; gap: .6rem; align-items: flex-start; font-size: .85rem; color: var(--slate); }
-.consent input { margin-top: .25rem; width: 18px; height: 18px; flex: none; accent-color: var(--teal); }
-
-.lead__trust { font-size: .82rem; color: var(--muted); margin: .8rem 0 0; text-align: center; }
-
-/* Honeypot — hidden from people, visible to naive bots */
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-
-/* Progressive multi-step: all steps visible without JS, paginated with JS */
-.lead[data-enhanced="true"] .step[hidden] { display: none; }
-.step__progress { display: flex; gap: .3rem; margin-bottom: 1.1rem; }
-.step__progress span { flex: 1; height: 3px; background: var(--line); }
-.step__progress span[data-done] { background: var(--brand); }
-/* Without JavaScript the form is one long page: no pagination chrome, every
-   step visible. `pre-step` is set on <html> before first paint by the inline
-   head script, so in a scripted browser the collapsed state is what paints —
-   the form never renders full height and then shrinks. Once app.js has run,
-   data-enhanced takes over and the [hidden] rule above drives which step
-   shows; if it never runs, the class is removed on load and these revert. */
-html:not(.pre-step) .lead:not([data-enhanced="true"]) .step__progress,
-html:not(.pre-step) .lead:not([data-enhanced="true"]) .step__nav { display: none; }
-html.pre-step .lead:not([data-enhanced="true"]) .step ~ .step { display: none; }
 
 /* ---------- Calculator (centerpiece annotation) ---------- */
 .calc { background: #fff; border: 1px solid var(--line); border-top: 4px solid var(--teal); border-radius: var(--radius-lg); padding: 1.35rem; }
@@ -742,8 +682,6 @@ html.pre-step .lead:not([data-enhanced="true"]) .step ~ .step { display: none; }
 @media (min-width: 1000px) { .market-banner { bottom: 1.25rem; left: auto; right: 1.25rem; margin: 0; } }
 
 /* ---------- Narrow-screen refinements ---------- */
-/* The enquiry panel keeps IMC's teal eyebrow even inside the navy hero. */
-.lead .eyebrow, .hero .lead .eyebrow { color: var(--teal); }
 @media (max-width: 479px) {
   .market-switch--bar .market-switch__label { display: none; }
   .market-switch ul { gap: .1rem .75rem; }

@@ -88,18 +88,3 @@ export function footerNavFor(marketKey) {
   }
   return [first, planning, guides];
 }
-
-/**
- * Lead form wiring.
- *
- * `action` is the only value the client needs to change to connect their CRM.
- * See docs/LEAD-FORM.md for the field contract. Every submission carries a
- * hidden `_market` field so leads can be routed per market.
- */
-export const LEAD_FORM = {
-  action: R.thankYou, // placeholder — see docs/CONTENT-VERIFICATION.md, item V-03
-  honeypot: 'company_website',
-  submitLabel: 'Send my quote request',
-  consentText:
-    'I agree that Removals to NZ may use these details to prepare and send my moving quote. See our [legal and privacy page](/legal/).'
-};

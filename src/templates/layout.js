@@ -44,13 +44,6 @@ export function layout(page, bodyHtml, assets) {
 ${map(alternates, (a) => `<link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)}
 
 <link rel="stylesheet" href="/css/main.${assets.cssHash}.css">
-<!-- Sole inline script, and deliberately so. The lead form ships all five
-     steps in the HTML because it must work without JavaScript; app.js then
-     collapses it to one step. Marking the document before first paint lets CSS
-     hide steps 2-5 up front, which avoids a layout shift. If app.js never
-     arrives, the load handler drops the class and the full single-page form
-     comes back, so the no-JS guarantee still holds. -->
-<script data-critical>document.documentElement.className+=" pre-step";addEventListener("load",function(){if(!document.querySelector('.lead[data-enhanced="true"]'))document.documentElement.classList.remove("pre-step")})</script>
 ${favicon ? `<link rel="icon" href="${favicon}" type="image/svg+xml">` : ''}
 ${touchIcon ? `<link rel="apple-touch-icon" href="${touchIcon}">` : ''}
 <meta name="theme-color" content="#142D3B">

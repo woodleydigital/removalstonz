@@ -1,9 +1,9 @@
 import { esc, map, join, inline, slugify, fmtDate } from './html.js';
 import { assetImg, assetAnyExt } from './assets.js';
-import { BRAND_ENTITY, OPERATOR, CONTACT, AFFILIATIONS } from '../data/site.js';
+import { BRAND_ENTITY, OPERATOR, CONTACT, AFFILIATIONS, ENQUIRY } from '../data/site.js';
 import { ITEM_GROUPS, LOAD_BANDS, CONTAINER_CAPACITY } from '../data/calculator.js';
 import { JOURNEYS, journeyShares } from '../data/journey.js';
-import { navFor, footerNavFor, LEAD_FORM } from '../data/nav.js';
+import { navFor, footerNavFor } from '../data/nav.js';
 import { MARKETS, MARKET_ORDER, marketOf, quoteHref } from '../data/markets.js';
 import { switcherLinks } from './i18n.js';
 
@@ -109,190 +109,36 @@ export function breadcrumbs(crumbs) {
 }
 
 /* ------------------------------------------------------------------ *
- * Lead form — the primary conversion component
+ * Enquiry form — IMC's own, embedded
  *
- * CRO notes:
- *  - Five short steps beat one long form on mobile; every step is one decision.
- *  - Without JavaScript all steps render at once and the form still posts.
- *  - No field is required unless it is genuinely needed to price a move.
- *  - Contact details come LAST, after the user has invested effort.
- *  - Localised per market: the origin field asks for a postcode, ZIP or postal
- *    code in the reader's own terms, US sizes lead with cubic feet, and a
- *    hidden `_market` field lets the CRM route the lead.
- *  - On shared pages (no market) the form asks which country the move is from.
+ * The form, its validation, its routing and its email delivery all live on
+ * internationalmoving.company (/embed/enquiry/). This renders the frame and
+ * nothing else, so there is one form to maintain across IMC's sites.
+ *
+ *  - The URL tags the enquiry with this site, the reader's market and the page,
+ *    and prefills "New Zealand" as the destination.
+ *  - The frame reserves the form's first-step height up front (no layout shift)
+ *    and app.js resizes it to each step from IMC's postMessage reports.
+ *  - The hero frame loads eagerly; frames further down load lazily.
+ *  - A plain link to IMC's full quote page sits under every frame, so a blocked
+ *    or failed embed never strands someone who wants to enquire.
  * ------------------------------------------------------------------ */
-const SIZE_BANDS = [
-  ['boxes', 'Boxes and suitcases only', 'Up to about 2 m³', 'Up to about 70 cu ft'],
-  ['studio', 'Studio or one-bedroom', 'About 5–10 m³', 'About 175–350 cu ft'],
-  ['two-bed', 'Two-bedroom home', 'About 12–20 m³', 'About 425–700 cu ft'],
-  ['three-bed-plus', 'Three-bedroom home or larger', 'About 25 m³ and up', 'About 900 cu ft and up'],
-  ['unsure', 'Not sure yet', 'We will work it out with you', 'We will work it out with you']
-];
-
 export function leadForm(opts = {}) {
-  const market = opts.market ? MARKETS[opts.market] : null;
-  const {
-    id = 'quote',
-    heading = market
-      ? `Get your ${market.key === 'us' ? 'US' : market.short} to New Zealand ${market.term === 'moving' ? 'moving' : 'removals'} quote`
-      : 'Get your New Zealand removals quote',
-    sub = 'Five short questions, and a move consultant replies with a written estimate.',
-    compact = false,
-    onDark = false,
-    source = 'generic'
-  } = opts;
-  const imperial = market && market.units === 'imperial';
-
-  const choice = (name, value, label, note, required) => `
-    <label class="choice">
-      <input type="radio" name="${esc(name)}" value="${esc(value)}"${required ? ' required' : ''}>
-      <span>${esc(label)}${note ? `<small>${esc(note)}</small>` : ''}</span>
-    </label>`;
-
-  const stepNav = (back, isLast) => `
-    <div class="step__nav btn-row">
-      ${back ? `<button type="button" class="btn btn--ghost" data-step-prev>Back</button>` : ''}
-      ${
-        isLast
-          ? `<button type="submit" class="btn btn--primary btn--lg" style="flex:1">${esc(LEAD_FORM.submitLabel)}</button>`
-          : `<button type="button" class="btn btn--primary" data-step-next style="flex:1">Continue</button>`
-      }
-    </div>`;
-
-  const originField = market
-    ? `
-        <div class="field">
-          <label for="${id}-from">${esc(market.originLabel)}</label>
-          <input type="text" id="${id}-from" name="origin" required autocomplete="postal-code"
-                 placeholder="${esc(market.originPlaceholder)}">
-        </div>`
-    : `
-        <div class="field">
-          <label for="${id}-country">Country you are moving from</label>
-          <select id="${id}-country" name="origin_country" required>
-            <option value="">Choose a country</option>
-            ${map(MARKET_ORDER, (k) => `<option value="${esc(k)}">${esc(MARKETS[k].name)}</option>`, '')}
-            <option value="other">Somewhere else</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="${id}-from">Collection town or postcode</label>
-          <input type="text" id="${id}-from" name="origin" required autocomplete="postal-code"
-                 placeholder="e.g. Bristol, Denver or Brisbane">
-        </div>`;
-
+  const { id = 'quote', source = 'generic', market = null, eager = false } = opts;
+  const params = new URLSearchParams({
+    source: ENQUIRY.source,
+    ...(market ? { market } : {}),
+    page: String(source).startsWith('/') ? source : `/${source}`,
+    to: ENQUIRY.destination
+  });
+  const src = `${ENQUIRY.origin}${ENQUIRY.path}?${params.toString()}`;
+  const fallback = `${ENQUIRY.origin}${ENQUIRY.fallbackPath}`;
   return `
-<div class="lead${onDark ? ' lead--onDark' : ''}" id="${esc(id)}">
-  <div class="lead__head">
-    <p class="eyebrow">Your moving plan</p>
-    <${compact ? 'h3' : 'h2'}>${esc(heading)}</${compact ? 'h3' : 'h2'}>
-    <p class="lead__sub">${esc(sub)}</p>
-  </div>
-
-  <!-- No novalidate here: with JavaScript disabled the browser's own
-       constraint validation is what stops an incomplete form posting. The
-       enhancement script sets novalidate once it can validate per step. -->
-  <form data-lead-form action="${esc(LEAD_FORM.action)}" method="post">
-    <input type="hidden" name="_form" value="nz-quote">
-    <input type="hidden" name="_market" value="${esc(market ? market.key : 'global')}">
-    <input type="hidden" name="_source" value="${esc(source)}">
-    <input type="hidden" name="estimated_volume_cbm" value="" data-calc-target>
-    <p class="hp" aria-hidden="true">
-      <label>Leave this field empty<input type="text" name="${esc(LEAD_FORM.honeypot)}" tabindex="-1" autocomplete="off"></label>
-    </p>
-
-    <div class="step__progress" aria-hidden="true">
-      <span></span><span></span><span></span><span></span><span></span>
-    </div>
-
-    <!-- Step 1: what is moving -->
-    <div class="step" data-step-name="scope" data-advance-on-select="true">
-      <fieldset>
-        <legend class="fieldset__legend">What are you moving to New Zealand?</legend>
-        <div class="choices choices--1">
-          ${choice('move_scope', 'household', 'Household move', 'Furniture and personal effects', true)}
-          ${choice('move_scope', 'part-load', 'A small move or a few large items', 'Part load or single pieces')}
-          ${choice('move_scope', 'baggage', 'Boxes and suitcases only', 'Excess baggage')}
-          ${choice('move_scope', 'vehicle', 'Household goods and a vehicle', 'Car or motorbike in a container')}
-        </div>
-      </fieldset>
-      ${stepNav(false, false)}
-    </div>
-
-    <!-- Step 2: route -->
-    <div class="step" data-step-name="route">
-      <fieldset>
-        <legend class="fieldset__legend">Where is the move going from and to?</legend>
-        ${originField}
-        <div class="field">
-          <label for="${id}-to">Destination town or city in New Zealand</label>
-          <input type="text" id="${id}-to" name="destination" required
-                 placeholder="e.g. Auckland, Christchurch, Tauranga">
-        </div>
-      </fieldset>
-      ${stepNav(true, false)}
-    </div>
-
-    <!-- Step 3: size -->
-    <div class="step" data-step-name="size" data-advance-on-select="true">
-      <fieldset>
-        <legend class="fieldset__legend">Roughly how much is there?</legend>
-        <div class="choices choices--1">
-          ${map(SIZE_BANDS, ([value, label, metric, cuft], i) => choice('move_size', value, label, imperial ? cuft : metric, i === 0))}
-        </div>
-      </fieldset>
-      ${stepNav(true, false)}
-    </div>
-
-    <!-- Step 4: timing -->
-    <div class="step" data-step-name="timing" data-advance-on-select="true">
-      <fieldset>
-        <legend class="fieldset__legend">When do you need to move?</legend>
-        <div class="choices">
-          ${choice('move_when', 'asap', 'As soon as possible', null, true)}
-          ${choice('move_when', '1-month', 'Within a month')}
-          ${choice('move_when', '1-3-months', 'One to three months')}
-          ${choice('move_when', 'researching', 'Still researching')}
-        </div>
-      </fieldset>
-      ${stepNav(true, false)}
-    </div>
-
-    <!-- Step 5: contact -->
-    <div class="step" data-step-name="contact">
-      <fieldset>
-        <legend class="fieldset__legend">Where should we send your estimate?</legend>
-        <div class="field">
-          <label for="${id}-name">Full name</label>
-          <input type="text" id="${id}-name" name="name" required autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="${id}-email">Email address</label>
-          <input type="email" id="${id}-email" name="email" required autocomplete="email"
-                 inputmode="email">
-        </div>
-        <div class="field">
-          <label for="${id}-phone">Phone number
-            <span class="field__hint">Optional — only used if we need to check a detail</span>
-          </label>
-          <input type="tel" id="${id}-phone" name="phone" autocomplete="tel" inputmode="tel">
-        </div>
-        <div class="field">
-          <label for="${id}-notes">Anything else we should know?
-            <span class="field__hint">Optional — access, fragile or oversized items, a vehicle, storage, your visa timing</span>
-          </label>
-          <textarea id="${id}-notes" name="notes" rows="3"></textarea>
-        </div>
-      </fieldset>
-      <div class="field">
-        <label class="consent">
-          <input type="checkbox" name="consent" value="yes" required>
-          <span>${inline(LEAD_FORM.consentText)}</span>
-        </label>
-      </div>
-      ${stepNav(true, true)}
-    </div>
-  </form>
+<div class="lead lead--embed" id="${esc(id)}">
+  <iframe class="lead__frame" src="${esc(src)}" title="Plan your move — enquiry form from International Moving Company"
+          loading="${eager ? 'eager' : 'lazy'}" data-enquiry-frame data-origin="${esc(ENQUIRY.origin)}"
+          referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <p class="lead__fallback">Form not loading? <a href="${esc(fallback)}" rel="noopener">Plan your move on internationalmoving.company</a>.</p>
 </div>`;
 }
 
@@ -367,7 +213,8 @@ export function calculator(opts = {}) {
       Figures are planning volumes for packed items, not measurements of your own belongings.
       A surveyor confirms the volume before any rate is issued.
     </p>
-    <a class="btn btn--primary btn--block" href="#quote" data-cta="calculator">Send this volume for a quote</a>
+    <p class="source-note">When you plan your move, add this total to the notes — it saves a step at survey.</p>
+    <a class="btn btn--primary btn--block" href="#quote" data-cta="calculator">Plan your move</a>
   </div>
 </div>`;
 }

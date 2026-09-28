@@ -1,139 +1,46 @@
 /* Removals to NZ — progressive enhancement only.
- * Everything below is optional: with JavaScript disabled the lead form submits
- * in one page, the calculator falls back to a published volume table, and all
- * navigation works. Playbook rule 01 — JS must never be the only source of
+ * Everything below is optional: with JavaScript disabled the enquiry frame
+ * still works at its reserved height, the calculator falls back to a published
+ * volume table, and all navigation works. Playbook rule 01 — JS must never be the only source of
  * content or links. */
 (function () {
   'use strict';
 
   /* ------------------------------------------------------------------ *
-   * 1. Lead form — multi-step pagination + validation + event tracking
+   * 1. IMC enquiry form frames — resize per step, report submissions
+   *
+   * IMC's embedded form posts { source: 'imc-enquiry', type, height } to its
+   * host. Only messages from the configured IMC origin, sent by one of this
+   * page's own frames, are acted on. The messages carry no personal data.
    * ------------------------------------------------------------------ */
-  function enhanceLeadForm(form) {
-    var steps = Array.prototype.slice.call(form.querySelectorAll('.step'));
-    if (steps.length < 2) return;
+  var frames = Array.prototype.slice.call(document.querySelectorAll('iframe[data-enquiry-frame]'));
 
-    var root = form.closest('.lead') || form;
-    root.setAttribute('data-enhanced', 'true');
-
-    // Take over validation now that we can report it per step. Until this
-    // point the browser's native validation is the safety net.
-    form.setAttribute('novalidate', '');
-
-    var index = 0;
-    var progress = form.querySelector('.step__progress');
-
-    function track(name, detail) {
-      // Vendor-neutral: push to dataLayer if present, always emit a DOM event
-      // so any tag manager or analytics snippet can subscribe.
-      try {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push(Object.assign({ event: name }, detail || {}));
-      } catch (e) {}
-      form.dispatchEvent(new CustomEvent('rtnz:' + name, { bubbles: true, detail: detail || {} }));
-    }
-
-    function show(next, initial) {
-      index = Math.max(0, Math.min(steps.length - 1, next));
-      steps.forEach(function (s, i) {
-        s.hidden = i !== index;
-      });
-      if (progress) {
-        Array.prototype.forEach.call(progress.children, function (bar, i) {
-          if (i <= index) bar.setAttribute('data-done', '');
-          else bar.removeAttribute('data-done');
-        });
-      }
-      // Move focus only when the reader asked to change step. Doing it on the
-      // first render would drag focus into the form the moment the page loads.
-      if (!initial) {
-        var heading = steps[index].querySelector('h3, h4, .fieldset__legend, legend');
-        if (heading) {
-          heading.setAttribute('tabindex', '-1');
-          heading.focus({ preventScroll: true });
-        }
-        var box = root.getBoundingClientRect();
-        if (box.top < 0) root.scrollIntoView({ block: 'start', behavior: 'smooth' });
-      }
-      track('quote_step_view', { step: index + 1, stepName: steps[index].dataset.stepName || '' });
-    }
-
-    // A step is valid when every constrained control inside it reports valid.
-    function stepValid(step) {
-      var controls = step.querySelectorAll('input, select, textarea');
-      var ok = true;
-      Array.prototype.forEach.call(controls, function (c) {
-        if (c.disabled || c.type === 'hidden') return;
-        if (!c.checkValidity()) {
-          if (ok) c.reportValidity();
-          ok = false;
-        }
-      });
-      return ok;
-    }
-
-    form.addEventListener('click', function (e) {
-      var next = e.target.closest('[data-step-next]');
-      var prev = e.target.closest('[data-step-prev]');
-      if (next) {
-        e.preventDefault();
-        if (stepValid(steps[index])) show(index + 1);
-        return;
-      }
-      if (prev) {
-        e.preventDefault();
-        show(index - 1);
-      }
-    });
-
-    // Enter should advance a step rather than submit a partly-filled form.
-    form.addEventListener('keydown', function (e) {
-      if (e.key !== 'Enter') return;
-      if (e.target.tagName === 'TEXTAREA') return;
-      if (index < steps.length - 1) {
-        e.preventDefault();
-        if (stepValid(steps[index])) show(index + 1);
-      }
-    });
-
-    // Selecting a radio in a single-question step moves the user forward.
-    form.addEventListener('change', function (e) {
-      var step = e.target.closest('.step');
-      if (!step || step.dataset.advanceOnSelect !== 'true') return;
-      if (e.target.type !== 'radio') return;
-      window.setTimeout(function () {
-        if (stepValid(step)) show(steps.indexOf(step) + 1);
-      }, 180);
-    });
-
-    form.addEventListener('submit', function (e) {
-      // The visible step is the only one whose fields the user can fix, so
-      // validate it before allowing the post. Earlier steps were validated on
-      // the way through.
-      for (var i = 0; i < steps.length; i++) {
-        if (!stepValid(steps[i])) {
-          e.preventDefault();
-          show(i);
-          stepValid(steps[i]); // re-report so the message appears on the visible step
-          track('quote_invalid', { step: i + 1 });
-          return;
-        }
-      }
-      track('quote_submit', { steps: steps.length });
-    });
-
-    // First interaction is a useful CRO metric independent of completion.
-    var started = false;
-    form.addEventListener('input', function () {
-      if (started) return;
-      started = true;
-      track('quote_start', {});
-    }, { once: false });
-
-    show(0, true);
+  function track(name, detail) {
+    // Vendor-neutral: dataLayer if present, plus a DOM event any tag can use.
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(Object.assign({ event: name }, detail || {}));
+    } catch (e) {}
+    document.dispatchEvent(new CustomEvent('rtnz:' + name, { detail: detail || {} }));
   }
 
-  document.querySelectorAll('form[data-lead-form]').forEach(enhanceLeadForm);
+  if (frames.length) {
+    window.addEventListener('message', function (e) {
+      var data = e.data;
+      if (!data || data.source !== 'imc-enquiry') return;
+      var frame = null;
+      for (var i = 0; i < frames.length; i++) {
+        if (frames[i].contentWindow === e.source && frames[i].dataset.origin === e.origin) frame = frames[i];
+      }
+      if (!frame) return;
+      if (data.type === 'height' && typeof data.height === 'number' && data.height > 200 && data.height < 5000) {
+        frame.style.height = Math.ceil(data.height) + 'px';
+        frame.setAttribute('data-sized', '');
+      } else if (data.type === 'sent') {
+        track('quote_submit', { page: location.pathname, market: document.documentElement.dataset.market || '' });
+      }
+    });
+  }
 
   /* ------------------------------------------------------------------ *
    * 2. Volume calculator — the page's centerpiece functional component
@@ -143,7 +50,6 @@
     var outCbm = calc.querySelector('[data-calc-cbm]');
     var outLoad = calc.querySelector('[data-calc-load]');
     var noscript = calc.querySelector('.calc__noscript');
-    var hidden = document.querySelectorAll('input[data-calc-target]');
     if (!out) return;
 
     if (noscript) noscript.hidden = true;
@@ -191,8 +97,6 @@
       if (outCbm) outCbm.textContent = 'about ' + cuft.toLocaleString('en-GB') + ' cubic feet';
       if (outLoad) outLoad.textContent = cbm > 0 ? describeLoad(cbm) : 'Add items to see the likely load type';
 
-      // Carry the estimate into the quote form so the user never retypes it.
-      Array.prototype.forEach.call(hidden, function (h) { h.value = cbm.toFixed(1); });
       calc.dispatchEvent(new CustomEvent('rtnz:volume_change', { bubbles: true, detail: { cbm: cbm } }));
     }
 

@@ -9,7 +9,7 @@
  *     /destinations/*            shared NZ destination pages (no hreflang)
  *     /guides/*  /tools/*        shared informational pages (no hreflang)
  *     /about/ /contact/ /legal/  trust
- *     /get-a-quote/ /thank-you/  conversion (noindex)
+ *     /get-a-quote/              conversion (noindex): IMC's embedded form
  *
  *   MARKETS  /uk/ /us/ /au/ /ca/ /europe/
  *     home   ─┐
@@ -19,7 +19,7 @@
  *     UK only: services/*, collection-areas/
  */
 
-import { chooser, volumeCalculator, getAQuote, thankYou, about, contact, legal } from './global.js';
+import { chooser, volumeCalculator, getAQuote, about, contact, legal } from './global.js';
 import { destinationsHub, auckland, wellington, christchurch, tauranga, hamilton, queenstown } from './destinations.js';
 import { guidesHub, customs, biosecurity, seaVsAir, checklist, compareQuotes } from './guides.js';
 import {
@@ -48,7 +48,7 @@ export const PAGES = [
   volumeCalculator,
 
   // Trust and conversion
-  about, contact, legal, getAQuote, thankYou,
+  about, contact, legal, getAQuote,
   ...MARKET_ORDER.map(makeQuotePage)
 ];
 

@@ -176,7 +176,6 @@ const robots = () => `# ${SITE_URL}/robots.txt
 
 User-agent: *
 Allow: /
-Disallow: /thank-you/
 
 Sitemap: ${SITE_URL}/sitemap.xml
 `;

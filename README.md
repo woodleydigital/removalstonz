@@ -24,9 +24,10 @@ No dependencies. Node 22.
 
 ## Before this site can capture a lead
 
-1. **Point the form at a real endpoint** — `src/data/nav.js`, `LEAD_FORM.action`.
-   See [`docs/LEAD-FORM.md`](docs/LEAD-FORM.md). Every lead carries a `_market`
-   field for routing.
+1. **Ship the IMC side.** The enquiry form is IMC's own, embedded from
+   internationalmoving.company — see [`docs/LEAD-FORM.md`](docs/LEAD-FORM.md).
+   Merge IMC branch `claude/embeddable-enquiry-form`, deploy IMC, and confirm
+   its email delivery is configured.
 2. **Make the enquiry mailbox live** — `enquiries@removalstonz.com`.
 3. **Add IMC's registered details** — `src/data/site.js`, `OPERATOR`: legal
    name, company number and address, which IMC does not publish yet.
@@ -78,7 +79,7 @@ src/
       global.js        Chooser, calculator, about, contact, legal, quote, thank-you
       uk.js            UK market: home, 5 services, cost, times, collection areas
       us.js au.js ca.js europe.js   Other markets: home, cost, times
-      quotes.js        Generated per-market quote pages (noindex)
+      quotes.js        Generated per-market "plan your move" pages (noindex)
       destinations.js  Shared: NZ destinations hub and six cities
       guides.js        Shared: customs, biosecurity, sea vs air, checklist, comparing quotes
   lib/

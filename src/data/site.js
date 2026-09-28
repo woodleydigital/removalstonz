@@ -97,3 +97,23 @@ export const REVIEW_INTERVALS = {
   transit: 90, // schedules
   evergreen: 365
 };
+
+/**
+ * The enquiry form is IMC's own, embedded from internationalmoving.company in
+ * an iframe, so enquiries use IMC's delivery and routing with no second form
+ * to maintain. IMC's /embed/enquiry/ page renders the form alone, tags each
+ * enquiry with `source` (plus the market and page it came from), prefills the
+ * destination, and posts its height back so the frame resizes per step.
+ *
+ * `ENQUIRY_ORIGIN` may be overridden at build time — for example to point a
+ * staging build at an IMC preview deployment. That origin must list this
+ * site in its frame-ancestors (IMC next.config.ts, EMBED_FRAME_ANCESTORS).
+ */
+export const ENQUIRY = {
+  origin: (process.env.ENQUIRY_ORIGIN || 'https://internationalmoving.company').replace(/\/$/, ''),
+  path: '/embed/enquiry/',
+  source: 'removalstonz',
+  destination: 'New Zealand',
+  // Shown under every frame, so a blocked or failed embed never strands a lead.
+  fallbackPath: '/get-a-quote/'
+};

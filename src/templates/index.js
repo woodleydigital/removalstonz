@@ -103,8 +103,8 @@ function renderBlock(b, page) {
       return faqBlock(page.faqs);
 
     case 'lead':
-      return `<div class="section--brand" style="border-radius:16px;padding:1.25rem;margin:2.5rem 0">
-        ${leadForm({ id: b.id || 'quote', heading: b.heading, sub: b.sub, source: page.path, market: page.market })}
+      return `<div class="lead-block">
+        ${leadForm({ id: b.id || 'quote', source: page.path, market: page.market })}
       </div>`;
 
     case 'html':
@@ -150,7 +150,7 @@ export function homeTemplate(page) {
         </div>` : ''}
       </div>
       <div class="hero__form">
-        ${leadForm({ id: 'quote', source: `${page.market || 'global'}-home-hero`, onDark: true, market: page.market })}
+        ${leadForm({ id: 'quote', source: page.path, market: page.market, eager: true })}
       </div>
       <div class="hero__trust-wrap">
         <ul class="hero__trust">
@@ -207,7 +207,7 @@ export function serviceTemplate(page) {
   </div>
 </div>
 <div class="wrap section section--tint" style="border-radius:16px">
-  ${leadForm({ id: 'quote', source: page.path, heading: page.quoteHeading, market: page.market })}
+  ${leadForm({ id: 'quote', source: page.path, market: page.market })}
 </div>`;
 }
 
@@ -258,13 +258,7 @@ export function quoteTemplate(page) {
   ${page.lede ? `<p class="lede">${inline(page.lede)}</p>` : ''}
   <div class="quote-grid">
     <div>
-      ${leadForm({
-        id: 'quote',
-        source: page.path,
-        heading: 'Tell us about your move',
-        sub: 'Five short questions.',
-        market: page.market
-      })}
+      ${leadForm({ id: 'quote', source: page.path, market: page.market, eager: true })}
     </div>
     <div class="prose">
       ${renderBlocks(page.blocks, page)}

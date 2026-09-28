@@ -44,7 +44,6 @@ export const R = {
   contact: '/contact/',
   legal: '/legal/',
   quote: '/get-a-quote/',
-  thankYou: '/thank-you/',
 
   uk: {
     ...marketRoutes('uk'),
