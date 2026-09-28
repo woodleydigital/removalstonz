@@ -1,0 +1,17 @@
+{
+  "name": "removalstonz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Removals to NZ — international removals to New Zealand from the UK, USA, Australia, Canada and Europe. Multi-market static lead-generation site.",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "audit": "node scripts/audit.mjs",
+    "check": "npm run build && npm run audit",
+    "serve": "node scripts/serve.mjs",
+    "dev": "node scripts/build.mjs && node scripts/serve.mjs"
+  }
+}
