@@ -7,13 +7,11 @@
  * awaiting client confirmation it is listed in docs/CONTENT-VERIFICATION.md.
  * Nothing in this file may be invented.
  *
- * OPERATOR STATUS: the company that will carry out Removals to NZ moves has not
- * been confirmed yet. Until it is, `OPERATOR.confirmed` is false and:
- *   - no MovingCompany node is emitted in JSON-LD (schema.js),
- *   - no founding year, office, accreditation or network claim appears anywhere,
- *   - bylines and Article authorship name the Removals to NZ brand itself.
- * Fill in OPERATOR, set `confirmed: true`, and the build starts declaring the
- * parent/subsidiary relationship in both directions, as removalstochina.com does.
+ * OPERATOR: Removals to NZ is a division of International Moving Company
+ * (IMC), internationalmoving.company. Only what IMC itself publishes is stated
+ * here — its name, short name, URL and description, and the @id its own JSON-LD
+ * uses, so both sites describe one organisation. Its registered legal name,
+ * company number and address are not published there and remain V-01.
  */
 
 /**
@@ -24,36 +22,31 @@
  */
 export const SITE_URL = 'https://removalstonz.com';
 
-/** Brand palette, sampled from New Zealand landscapes. See docs/BRAND.md. */
+/** IMC colour roles (internationalmoving.company/brand/). See docs/BRAND.md. */
 export const BRAND = {
-  ink: '#0C2233', // Wakatipu night
-  brandDarker: '#07566A', // Bay of Islands deep — 8.2:1 on white
-  brandDeep: '#0A6C80', // 6.1:1 on white
-  brand: '#12A3B5', // Bay of Islands shallows
-  accent: '#7FDCE6',
-  gold: '#F2B233', // Wānaka poplars
-  dusk: '#3A3470' // Wānaka at dusk
+  ink: '#142D3B',
+  accent: '#167D8D',
+  actionHover: '#116A78',
+  paper: '#F6F3ED',
+  muted: '#526572',
+  lightAccent: '#A7D2CE'
 };
 
-/**
- * The operating company — PENDING (docs/CONTENT-VERIFICATION.md, V-01).
- * Leave every field null until supplied in writing. Nothing here renders while
- * `confirmed` is false.
- */
+/** The parent company. Everything here is as published on internationalmoving.company. */
 export const OPERATOR = {
-  confirmed: false,
-  id: `${SITE_URL}/#operator`,
+  confirmed: true,
+  // IMC's own JSON-LD @id, so this site's graph points at the same entity.
+  id: 'https://internationalmoving.company/#organization',
+  name: 'International Moving Company',
+  shortName: 'IMC',
+  url: 'https://internationalmoving.company/',
+  description:
+    'International relocation management company focused on worldwide door-to-door household removals.',
+  // Not published by IMC — supply before launch (V-01). Rendered only when set.
   legalName: null,
-  name: null,
-  url: null,
-  email: null,
-  foundingDate: null,
   companyNumber: null,
   registeredAddress: null,
-  sameAs: [],
-  knowsAbout: [],
-  description: null,
-  accreditations: []
+  sameAs: []
 };
 
 /**
@@ -69,9 +62,10 @@ export const BRAND_ENTITY = {
   id: `${SITE_URL}/#organisation`,
   name: 'Removals to NZ',
   byline: 'the Removals to NZ team',
-  legalNote: 'Removals to NZ arranges door-to-door international removals to New Zealand.',
+  endorsement: 'by International Moving Company',
+  legalNote: 'Removals to NZ is the New Zealand removals division of International Moving Company (IMC).',
   url: SITE_URL,
-  logo: '/img/removals-to-nz-logo.svg', // logical path; resolved to its hashed URL at build
+  logo: '/img/rtnz-mark.svg', // logical path; resolved to its hashed URL at build
   description:
     'Door-to-door international removals, part loads and container shipping to New Zealand from the United Kingdom, the United States, Australia, Canada and Europe.',
   areaServedFrom: ['United Kingdom', 'United States', 'Australia', 'Canada', 'Europe'],

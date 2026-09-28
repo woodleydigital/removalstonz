@@ -19,7 +19,7 @@ export const chooser = {
   hreflangGroup: 'home',
   xDefault: true,
   title: 'Removals to New Zealand | UK, USA, Australia, Canada, Europe',
-  h1: 'Removals to New Zealand, door to door',
+  h1: 'Removals to New Zealand, door to door.',
   lede:
     'Household removals, part loads and full containers to New Zealand from the UK, the USA, Australia, Canada and Europe — priced from a published inventory, packed for New Zealand biosecurity, and delivered to your door.',
   description:
@@ -28,8 +28,10 @@ export const chooser = {
   updated: '2026-09-28',
   crumbs: [HOME],
   heroCta: { href: '#where-are-you-moving-from', label: 'Choose where you are moving from' },
+  eyebrow: 'International removals to New Zealand',
+  h1Accent: 'door to door.',
   heroTrust: [
-    '**One mover accountable door to door** — collection, freight, NZ clearance and delivery',
+    '**One agreed plan, door to door** — collection, international transport, NZ clearance and delivery',
     '**Priced from volumes we publish** — so two quotes can be compared on one basis',
     '**Packed with MPI biosecurity in mind** — the step most overseas movers underestimate'
   ],
@@ -289,9 +291,9 @@ export const about = {
   title: 'About Removals to NZ | International Removals to New Zealand',
   h1: 'About Removals to NZ',
   lede:
-    'Removals to NZ arranges door-to-door international removals to New Zealand from the UK, the USA, Australia, Canada and Europe.',
+    'Removals to NZ is the New Zealand removals division of International Moving Company (IMC), arranging door-to-door moves from the UK, the USA, Australia, Canada and Europe.',
   description:
-    'Who Removals to NZ is, how moves to New Zealand are carried out, and the editorial rules this site follows on prices, customs and biosecurity.',
+    'Removals to NZ is the New Zealand division of International Moving Company (IMC): who is behind it, how moves are managed, and the rules this site follows.',
   published: '2026-09-28',
   updated: '2026-09-28',
   crumbs: c({ href: R.about, label: 'About' }),
@@ -309,9 +311,20 @@ export const about = {
     },
     {
       type: 'p',
-      text: OPERATOR.confirmed
-        ? `Moves are carried out by ${OPERATOR.legalName}.`
-        : 'The company details of the mover that carries out Removals to NZ moves — its registered name, address and memberships — will be published on this page. We would rather leave a claim out than print one we have not checked.'
+      text: 'Removals to NZ is the New Zealand removals division of [International Moving Company (IMC)](https://internationalmoving.company/), which manages worldwide door-to-door household removals. IMC brings collection, international transport and home delivery into one agreed plan, with the services and responsibilities explained at each stage. This site applies that approach to one destination.'
+    },
+    { type: 'h2', text: 'The people behind IMC' },
+    {
+      type: 'p',
+      text: '**Warwick Woodley** brings more than four decades of hands-on experience in international moving and freight forwarding. A former FIDI Academy trainer, he has trained moving professionals around the world.'
+    },
+    {
+      type: 'p',
+      text: '**Maiane Cassanego** previously worked at New Zealand Van Lines before joining the Export Division at CaroTrans, and brings that relocation and export experience to helping clients understand each stage of their move.'
+    },
+    {
+      type: 'p',
+      text: 'Their full profiles are on [IMC\'s about page](https://internationalmoving.company/about-us/).'
     },
     { type: 'h2', text: 'The rules this site follows' },
     {
@@ -405,7 +418,7 @@ export const legal = {
     {
       type: 'p',
       text: OPERATOR.confirmed
-        ? `${OPERATOR.legalName}${OPERATOR.companyNumber ? `, company number ${OPERATOR.companyNumber}` : ''}${OPERATOR.registeredAddress ? `, ${OPERATOR.registeredAddress}` : ''}, is responsible for personal data collected through this site.`
+        ? `${OPERATOR.legalName || `${OPERATOR.name} (${OPERATOR.shortName})`}${OPERATOR.companyNumber ? `, company number ${OPERATOR.companyNumber}` : ''}${OPERATOR.registeredAddress ? `, ${OPERATOR.registeredAddress}` : ''}, is responsible for personal data collected through this site.`
         : 'The registered company responsible for personal data collected through this site will be named here, with its registration number and address, before the quote form goes live.'
     },
     { type: 'h2', text: 'What we collect and why' },

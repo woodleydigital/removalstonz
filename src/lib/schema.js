@@ -8,7 +8,7 @@
  * fields, so schema and copy cannot drift apart.
  */
 
-import { SITE_URL, OPERATOR, BRAND_ENTITY, OFFICES, CONTACT, AFFILIATIONS } from '../data/site.js';
+import { SITE_URL, OPERATOR, BRAND_ENTITY, CONTACT, AFFILIATIONS } from '../data/site.js';
 import { MARKETS, MARKET_ORDER, marketOf } from '../data/markets.js';
 import { asset, assetSize } from './assets.js';
 
@@ -24,10 +24,9 @@ export const IDS = {
 /**
  * The site's entity backbone, emitted on every page.
  *
- * While the operating company is unconfirmed, the graph describes the Removals
- * to NZ brand alone. Once OPERATOR.confirmed is true it becomes a SUBSIDIARY
- * SITE graph, declared in both directions: the MovingCompany names the brand
- * as `subOrganization` and the brand names it as `parentOrganization`.
+ * Removals to NZ is a division of International Moving Company (IMC). The graph
+ * says so in both directions: IMC names the division as `subOrganization`, and
+ * the division names IMC as `parentOrganization`.
  *
  * Everything asserted here is visible somewhere on the site. Properties that
  * depend on a particular page's content — affiliations, the service catalogue —
@@ -72,31 +71,23 @@ export function organisationGraph(page = {}) {
   const phone = market ? CONTACT.phones[market.key] : null;
   if (phone) organisation.telephone = phone;
 
-  // The operating company is declared only once it is confirmed (site.js,
-  // V-01). When it is, the relationship is stated in both directions.
+  // The parent company. Its @id is the one IMC's own site uses, and it is
+  // typed as IMC types itself (Organization — IMC manages moves; it does not
+  // claim to own fleets). The relationship is declared in both directions.
   if (OPERATOR.confirmed) {
-    nodes.push({
-      '@type': 'MovingCompany',
+    const parent = {
+      '@type': 'Organization',
       '@id': IDS.operator,
-      name: OPERATOR.legalName,
-      alternateName: OPERATOR.name,
+      name: OPERATOR.name,
+      alternateName: OPERATOR.shortName,
       url: OPERATOR.url,
-      email: OPERATOR.email,
-      foundingDate: OPERATOR.foundingDate,
       description: OPERATOR.description,
-      sameAs: OPERATOR.sameAs,
-      knowsAbout: OPERATOR.knowsAbout,
-      subOrganization: { '@id': IDS.organisation },
-      location: OFFICES.map((o) => ({
-        '@type': 'Place',
-        '@id': `${SITE_URL}/#office-${o.key}`,
-        name: `${OPERATOR.name} — ${o.city}`,
-        address: { '@type': 'PostalAddress', addressLocality: o.city, addressCountry: o.countryCode },
-        telephone: o.phone
-      }))
-    });
+      subOrganization: { '@id': IDS.organisation }
+    };
+    if (OPERATOR.legalName) parent.legalName = OPERATOR.legalName;
+    if (OPERATOR.sameAs.length) parent.sameAs = OPERATOR.sameAs;
+    nodes.push(parent);
     organisation.parentOrganization = { '@id': IDS.operator };
-    if (OPERATOR.sameAs.length) organisation.sameAs = OPERATOR.sameAs;
   }
 
   // Affiliations are asserted only where the affiliations block is rendered.

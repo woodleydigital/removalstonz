@@ -25,6 +25,8 @@ export const usHome = {
   template: 'home',
   title: 'Moving to New Zealand from the USA | International Movers',
   h1: 'Moving to New Zealand from the USA',
+  eyebrow: 'International moving · USA to New Zealand',
+  h1Accent: 'from the USA',
   lede:
     'International moving from anywhere in the United States to anywhere in New Zealand — shared containers, full containers and air freight, cleared through NZ biosecurity and delivered to your door.',
   description:

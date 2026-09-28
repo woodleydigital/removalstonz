@@ -1,79 +1,118 @@
 # Brand
 
-## The mark: a kiwi under the Southern Cross
+Removals to NZ is a division of **International Moving Company (IMC)** and uses
+the IMC identity: its colours, its two typefaces, its component styling and
+its voice, as recorded at <https://internationalmoving.company/brand/>. This
+file covers what is specific to the division, and how it maps onto IMC.
 
-- **The kiwi** is New Zealand's most recognised symbol and the nickname New
-  Zealanders give themselves. It is drawn facing right, towards New Zealand on
-  a west-to-east read, foraging with its long beak down: at home, settled.
-- **The Southern Cross** sits above it in poplar gold, arranged as on the New
-  Zealand flag (four stars: Gamma top, Alpha bottom, Beta left, Delta right).
-  The kiwi is nocturnal, and navigators found their way south by these stars.
-- **The swell** under its feet is the voyage — the sea your belongings cross —
-  rising towards the kiwi.
+---
 
-### What we deliberately did not use
+## The mark: NZ, with the IMC door
 
-- **The silver fern.** Heavily associated with national teams and government
-  marks (the FernMark is a licensed New Zealand government brand). Too easy to
-  collide with a protected or registered mark.
-- **The koru and other Māori motifs.** They carry cultural meaning, and using
-  them commercially without iwi involvement is widely considered
-  inappropriate. If the operator wants to include te reo Māori or Māori design,
-  do it properly, with a Māori designer.
-- **The New Zealand flag itself.**
+The IMC mark is heavy geometric capitals in ink, with one device: inside the
+M, the lower counter is a doorway, and a teal door stands open in it. An open
+door is what a move is.
 
-## Wordmark
+The division mark uses the same construction for **NZ**, measured from the
+IMC artwork (cap height 220 units):
 
-**removals / to NZ**, set in **Outfit** ExtraBold (SIL Open Font License 1.1),
-converted to outlines so the logo renders identically everywhere. "to NZ"
-takes the Bay of Islands blue. The tagline **DOOR TO DOOR TO NEW ZEALAND**
-(Outfit SemiBold, tracked) appears on large uses only; the header lockup drops
-it, since it would render at about 5px there.
+| | IMC | NZ |
+|---|---|---|
+| Letterforms | Heavy geometric capitals | The same — stems 66 units, 0.30 of cap height |
+| Where the door is | Beneath the M's chevron | Beneath the N's diagonal, which stops on the right stem |
+| Door leaf | Teal, 17 units off the hinge jamb, 40 wide, in perspective | The same |
+| Colours | Ink #142D3B, accent #167D8D | The same |
 
-Outfit Bold is also the site's heading face (self-hosted, one 14 kB file,
-preloaded, `font-display: optional` so it can never shift the layout). Body
-copy stays on the system font stack.
+So the two read as one family at a glance, and the NZ mark still says
+"moving" on its own. At favicon size the N alone is used; its door is the
+recognisable part.
 
-## Palette — sampled from New Zealand landscapes
+### How it is used
 
-| Token | Hex | Name | Use | Contrast |
-|---|---|---|---|---|
-| `--ink` | `#0C2233` | Wakatipu night | Text, dark surfaces, logo | 16.3:1 on white |
-| `--brand-darker` | `#07566A` | Bay of Islands, deep | Buttons, links | 8.2:1 on white |
-| `--brand-deep` | `#0A6C80` | Bay of Islands | Text accents, "to NZ" | 6.1:1 on white |
-| `--brand` | `#12A3B5` | Bay of Islands shallows | Borders, bars, the swell — never text | 3.0:1 on white |
-| `--accent` | `#7FDCE6` | Shallows, light | Links and accents on dark | 10.3:1 on ink |
-| `--accent-2` | `#F2B233` | Wānaka poplar gold | Stars, checkmarks on dark | 8.7:1 on ink |
-| `--dusk` | `#3A3470` | Wānaka at dusk | Hero gradient, app icon | — |
-| `--paper-2` | `#F4F7FA` | Alpine mist | Tinted sections | — |
+- **Always beside the name, in live HTML text** — as IMC's header does:
+  mark, a hairline divider, then **Removals to NZ** over *by International
+  Moving Company*. Below 480px the endorsement line drops in the header only;
+  the footer always carries it.
+- **On light surfaces**: `rtnz-mark.svg` (ink and teal).
+- **On ink**: `rtnz-mark-reversed.svg` (paper and light accent). Unlike the
+  parent, which has only a raster with an ivory field and must be backed on a
+  paper panel, this is a true vector on a transparent ground, so a reversed
+  variant exists.
+- Do not add a trade mark symbol, and do not recolour it outside these two
+  variants.
 
-The hero is the Wānaka dusk sky: night blue into dusk violet, with a faint
-Southern Cross.
+### What the division mark does not claim
 
-The journey chart keeps its own validated categorical palette (see
-CONTENT-VERIFICATION B5); it is not recoloured to the brand.
+It is new artwork in the parent's construction, not a redraw of the IMC mark.
+Like the IMC mark, it has had no legal clearance, recognition research or
+print proofing. Get IMC's sign-off before it is used beyond this site.
+
+---
+
+## Colour — the IMC roles
+
+| Role | Hex | Use | Contrast |
+|---|---|---|---|
+| Ink | `#142D3B` | Text, major surfaces (hero, header bar), the mark | 14.30:1 on white |
+| Accent | `#167D8D` | Primary actions, rules, the door | 4.83:1 carrying white |
+| Action hover | `#116A78` | Hover and active; links | 6.26:1 carrying white |
+| Paper | `#F6F3ED` | Quiet surfaces: answer blocks, notes, footer | surface only |
+| Muted text | `#526572` | Supporting text | 6.06:1 on white |
+| Light accent | `#A7D2CE` | Display text and eyebrows on navy | 8.69:1 on ink |
+
+The CSS keeps short component aliases (`--brand`, `--accent`, …) pointing at
+these roles; change a colour in the `:root` block of `main.css` only.
+
+The journey chart uses four of these roles in the order ink, accent, light
+accent, muted, so every adjacent pair differs strongly in lightness. Every
+segment is also labelled in text, following IMC's rule that colour never
+carries a meaning on its own.
+
+## Typography — the IMC pair, no webfonts
+
+- **Georgia**, regular weight, tight tracking: page titles, section headings,
+  the hero display line. The hero's closing phrase takes the light accent, as
+  IMC's "International moving. *Clearly managed.*" does (`h1Accent` in page
+  data).
+- **Arial**: body (17px / 1.7), card headings (semibold), labels, forms,
+  buttons. Figures use tabular numerals.
+- **Eyebrows**: Arial bold, uppercase, tracked, in the accent; the hero's
+  carries IMC's open-corner rule.
+
+## Components
+
+The same patterns as internationalmoving.company: a flat ink hero; a white
+enquiry panel with a 4px teal top rule and the "Your moving plan" eyebrow;
+teal buttons with 6px corners; 3px-radius inputs; open card columns under
+hairlines, not boxed tiles; paper notes with a 3px rule; ruled FAQ rows; and
+a paper footer.
+
+## Voice
+
+IMC's voice applies: calm, direct British and New Zealand English; say what
+is collected, transported and delivered; say which milestone an estimate
+describes; never promise a price, a response time or an outcome. The main
+action is **Plan your move**. See IMC's brand page for the full do/don't list.
+
+---
 
 ## Files
 
 | File | Use |
 |---|---|
-| `src/assets/img/removals-to-nz-lockup.svg` | Header (no tagline) |
-| `src/assets/img/removals-to-nz-logo.svg` | Full lockup on light, with tagline; JSON-LD logo |
-| `src/assets/img/removals-to-nz-logo-reversed.svg` | Full lockup on dark (footer, OG image) |
-| `src/assets/img/removals-to-nz-mark.svg` | The mark alone |
-| `src/assets/img/favicon.svg` | Favicon / app tile |
+| `src/assets/img/rtnz-mark.svg` | Mark on light surfaces; JSON-LD logo |
+| `src/assets/img/rtnz-mark-reversed.svg` | Mark on ink |
+| `src/assets/img/favicon.svg` | Browser tab: the N with its door, on paper |
 | `src/assets/img/apple-touch-icon.png` | 180×180 home-screen icon |
-| `src/assets/img/og-default.png` | 1200×630 social sharing image |
+| `src/assets/img/og-default.png` | 1200×630 sharing image in the IMC hero style |
 
 ## Regenerating
 
-The SVGs are generated, not hand-edited:
-
 ```bash
-pip install fonttools
-# Outfit .woff files (500–800) from @fontsource/outfit in a folder:
-python3 scripts/brand/logo.py path/to/outfit-woffs
-node scripts/brand/raster.mjs     # PNGs; needs Playwright's Chromium
+python3 scripts/brand/logo.py              # SVG mark, reversed mark, favicon
+node scripts/brand/raster.mjs <fonts-dir>  # PNGs; needs Playwright's Chromium
 ```
 
-Colours and artwork are constants at the top of `scripts/brand/logo.py`.
+`raster.mjs` renders with Gelasio and Arimo, the open metric-compatible
+equivalents of Georgia and Arial, because a build machine may have neither
+font. The geometry constants are at the top of `logo.py`.

@@ -2,7 +2,9 @@
 
 Lead-generation website for **removalstonz.com** — international removals to
 New Zealand from the **UK** (primary market), the **USA**, **Australia**,
-**Canada** and **Europe**.
+**Canada** and **Europe**. Removals to NZ is a division of
+[International Moving Company (IMC)](https://internationalmoving.company/) and
+uses the IMC identity.
 
 Built on the same static generator and pre-publish quality gate as
 removalstochina.com, extended for international targeting from the start:
@@ -26,9 +28,8 @@ No dependencies. Node 22.
    See [`docs/LEAD-FORM.md`](docs/LEAD-FORM.md). Every lead carries a `_market`
    field for routing.
 2. **Make the enquiry mailbox live** — `enquiries@removalstonz.com`.
-3. **Confirm the operating company** — `src/data/site.js`, `OPERATOR`. Left as a
-   placeholder by instruction; nothing about it renders until
-   `confirmed: true`.
+3. **Add IMC's registered details** — `src/data/site.js`, `OPERATOR`: legal
+   name, company number and address, which IMC does not publish yet.
 
 The full pre-launch list is [`docs/CONTENT-VERIFICATION.md`](docs/CONTENT-VERIFICATION.md).
 
@@ -86,7 +87,7 @@ src/
     components.js      Header, switcher, banner, localised lead form, calculator, blocks
     html.js assets.js  Helpers
   templates/           layout.js (the HTML shell) and page templates
-  assets/              CSS, JS, SVG logos, Outfit heading font (OFL)
+  assets/              CSS (IMC design system), JS, SVG mark
 scripts/
   build.mjs            Static build, sitemap with hreflang, llms.txt, robots.txt
   audit.mjs            Pre-publish quality gate, including international checks
@@ -136,22 +137,13 @@ expected for those pages.
 
 ## Brand
 
-A kiwi under the Southern Cross, standing on the swell of the voyage, with an
-outlined **removals / to NZ** wordmark in Outfit. The palette is sampled from
-New Zealand landscapes: Bay of Islands teal, Wakatipu night blue, Wānaka dusk
-and autumn-poplar gold. The layout and components are the same as
-removalstochina.com.
+The IMC identity: ink `#142D3B`, accent `#167D8D`, paper `#F6F3ED`, muted
+`#526572`, light accent `#A7D2CE`; Georgia headings and Arial text, with no
+webfonts; IMC's hero, enquiry panel, buttons and footer. The division mark is
+**NZ** drawn in IMC's construction, with the teal open door in the N, always
+set beside the name *Removals to NZ, by International Moving Company*.
 
-| Token | Value | Note |
-|---|---|---|
-| `--ink` | `#0C2233` | Wakatipu night |
-| `--brand-darker` | `#07566A` | Buttons and links, 8.2:1 on white |
-| `--brand-deep` | `#0A6C80` | 6.1:1 on white |
-| `--brand` | `#12A3B5` | Borders and marks only |
-| `--accent-2` | `#F2B233` | Poplar gold, on dark only |
-
-Full rationale, what was deliberately avoided (silver fern, koru) and how to
-regenerate the files: [`docs/BRAND.md`](docs/BRAND.md).
+Details, usage rules and how to regenerate the files: [`docs/BRAND.md`](docs/BRAND.md).
 
 ---
 

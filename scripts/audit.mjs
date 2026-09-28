@@ -218,7 +218,7 @@ async function audit() {
       if (graph) {
         const nodes = graph['@graph'] || [];
         const types = nodes.map((n) => n['@type']);
-        if (!types.includes('Organization')) fail(path, 'schema', 'No Organization node');
+        if (!nodes.some((n) => n['@id'] === `${SITE_URL}/#organisation`)) fail(path, 'schema', 'No Organization node for the site');
 
         // FAQPage schema must match FAQs rendered on the page (playbook rule 07).
         const faqNode = nodes.find((n) => n['@type'] === 'FAQPage');
@@ -234,8 +234,8 @@ async function audit() {
 
         // A subsidiary site must state the relationship in both directions, or
         // the two entities read as unrelated organisations.
-        const orgNode = nodes.find((n) => n['@type'] === 'Organization');
-        const opNode = nodes.find((n) => n['@type'] === 'MovingCompany');
+        const orgNode = nodes.find((n) => n['@id'] === `${SITE_URL}/#organisation`);
+        const opNode = nodes.find((n) => n.subOrganization);
         if (orgNode && opNode) {
           if (!orgNode.parentOrganization) {
             fail(path, 'schema-entity', 'Organization does not declare parentOrganization');
@@ -440,7 +440,7 @@ async function audit() {
   for (const doc of docs) {
     for (const link of doc.links || []) {
       const target = link.endsWith('/') || link.includes('.') ? link : link + '/';
-      if (/^\/(css|js|img|fonts)\//.test(link)) continue;
+      if (/^\/(css|js|img)\//.test(link)) continue;
       if (link === '/robots.txt' || link === '/sitemap.xml' || link === '/llms.txt') continue;
       if (!known.has(target)) {
         fail(doc.path, 'broken-link', `Links to ${link}, which does not exist`);

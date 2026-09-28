@@ -25,6 +25,8 @@ export const auHome = {
   template: 'home',
   title: 'Removals to New Zealand from Australia | Trans-Tasman Moves',
   h1: 'Removals to New Zealand from Australia',
+  eyebrow: 'Trans-Tasman removals',
+  h1Accent: 'from Australia',
   lede:
     'Trans-Tasman removals from Sydney, Melbourne, Brisbane, Perth, Adelaide and everywhere between — packed for New Zealand biosecurity and delivered door to door, usually within four to eight weeks.',
   description:

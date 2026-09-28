@@ -120,6 +120,17 @@ function renderBlock(b, page) {
  * ------------------------------------------------------------------ */
 
 /**
+ * IMC's display headline sets its closing phrase in the light accent
+ * ("International moving. / Clearly managed."). `h1Accent` names that trailing
+ * phrase; the H1 text itself is unchanged, so titles and audits are unaffected.
+ */
+function heroH1(page) {
+  const a = page.h1Accent;
+  if (!a || !page.h1.endsWith(a)) return esc(page.h1);
+  return `${esc(page.h1.slice(0, -a.length).trimEnd())} <span class="h1-accent">${esc(a)}</span>`;
+}
+
+/**
  * Home — hero with the conversion component beside the value proposition.
  * Used for every market home and for the global chooser at `/`. The hero's
  * secondary button is data (`heroCta`), so each market links to its own
@@ -131,7 +142,8 @@ export function homeTemplate(page) {
   <div class="wrap">
     <div class="hero__grid">
       <div class="hero__intro">
-        <h1>${esc(page.h1)}</h1>
+        ${page.eyebrow ? `<p class="eyebrow eyebrow--corner">${esc(page.eyebrow)}</p>` : ''}
+        <h1>${heroH1(page)}</h1>
         <p class="hero__lede">${esc(page.lede)}</p>
         ${page.heroCta ? `<div class="btn-row">
           <a class="btn btn--ghost btn--lg" href="${esc(page.heroCta.href)}">${esc(page.heroCta.label)}</a>

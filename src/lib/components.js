@@ -1,14 +1,22 @@
 import { esc, map, join, inline, slugify, fmtDate } from './html.js';
-import { asset, assetImg, assetAnyExt } from './assets.js';
-import { BRAND_ENTITY, CONTACT, AFFILIATIONS } from '../data/site.js';
+import { assetImg, assetAnyExt } from './assets.js';
+import { BRAND_ENTITY, OPERATOR, CONTACT, AFFILIATIONS } from '../data/site.js';
 import { ITEM_GROUPS, LOAD_BANDS, CONTAINER_CAPACITY } from '../data/calculator.js';
 import { JOURNEYS, journeyShares } from '../data/journey.js';
 import { navFor, footerNavFor, LEAD_FORM } from '../data/nav.js';
 import { MARKETS, MARKET_ORDER, marketOf, quoteHref } from '../data/markets.js';
 import { switcherLinks } from './i18n.js';
 
-const LOGO = '/img/removals-to-nz-lockup.svg';
-const LOGO_REVERSED = '/img/removals-to-nz-logo-reversed.svg';
+// The NZ mark in the IMC door construction. As on internationalmoving.company,
+// the mark is always paired with the company name in live HTML text.
+const MARK = '/img/rtnz-mark.svg';
+
+/** Mark + name lockup, shared by header and footer. */
+function brandLockup(cls) {
+  const m = assetImg(MARK);
+  return `<img src="${esc(m.src)}" width="${m.width}" height="${m.height}" alt=""${cls === 'site-footer__brand' ? ' loading="lazy"' : ''}>
+        <span class="brand-name">${esc(BRAND_ENTITY.name)}<small>${esc(BRAND_ENTITY.endorsement)}</small></span>`;
+}
 
 /* ------------------------------------------------------------------ *
  * Market switcher
@@ -55,15 +63,13 @@ export function header(page) {
     return `<li><a href="${esc(item.href)}"${current ? ' aria-current="page"' : ''}>${esc(item.label)}</a></li>`;
   };
   const home = page.market ? MARKETS[page.market].prefix : '/';
-  const logo = assetImg(LOGO);
   return `
 ${marketSwitcher(page, 'bar')}
 <header class="site-header">
   <div class="wrap">
     <div class="site-header__bar">
-      <a class="site-header__logo" href="${esc(home)}" aria-label="${esc(BRAND_ENTITY.name)} — home">
-        <img src="${esc(logo.src)}" width="${logo.width}" height="${logo.height}"
-             alt="${esc(BRAND_ENTITY.name)}">
+      <a class="site-header__logo" href="${esc(home)}" aria-label="${esc(BRAND_ENTITY.name)}, ${esc(BRAND_ENTITY.endorsement)} — home">
+        ${brandLockup('site-header__logo')}
       </a>
       <span class="site-header__spacer"></span>
       <!-- The checkbox is the drawer mechanism so the nav opens without JS. Its
@@ -74,7 +80,7 @@ ${marketSwitcher(page, 'bar')}
       <nav class="site-nav" aria-label="Main">
         <ul>
           ${map(navFor(page.market), link)}
-          <li><a class="btn btn--primary" href="${esc(quoteHref(page))}" data-cta="header">Get a quote</a></li>
+          <li><a class="btn btn--primary" href="${esc(quoteHref(page))}" data-cta="header">Plan your move</a></li>
         </ul>
       </nav>
     </div>
@@ -178,6 +184,7 @@ export function leadForm(opts = {}) {
   return `
 <div class="lead${onDark ? ' lead--onDark' : ''}" id="${esc(id)}">
   <div class="lead__head">
+    <p class="eyebrow">Your moving plan</p>
     <${compact ? 'h3' : 'h2'}>${esc(heading)}</${compact ? 'h3' : 'h2'}>
     <p class="lead__sub">${esc(sub)}</p>
   </div>
@@ -484,7 +491,7 @@ export function journeyDiagram(opts = {}) {
   const seaShare = Math.round(sea.share);
 
   const segment = (s) => `
-      <div class="journey__seg" style="--seg:${s.share.toFixed(2)}%;--seg-colour:${s.colour}">
+      <div class="journey__seg" style="--seg:${s.share.toFixed(2)}%;--seg-colour:${s.colour};--seg-ink:${s.ink}">
         <span class="journey__seg-label">${esc(s.range)}</span>
       </div>`;
 
@@ -599,9 +606,9 @@ export function trustStrip(page) {
   <div class="wrap">
     <ul>
       <li><b>Door to door</b> — ${esc(m ? `${m.term === 'moving' ? 'pickup' : 'collection'} ${m.from.replace('from ', 'in ')}` : 'collection')} to delivery in New Zealand</li>
-      <li><b>Biosecurity-aware packing</b> — outdoor items cleaned and listed for MPI</li>
+      <li><b>Biosecurity planned in</b> — what to clean, list or leave behind for MPI</li>
       <li><b>Published volumes</b> — compare quotes on one basis</li>
-      <li><b>Written quotes</b> — with the exclusions listed</li>
+      <li><b>Written estimates</b> — with the exclusions listed</li>
     </ul>
   </div>
 </div>`;
@@ -637,7 +644,7 @@ export function stickyCta(page) {
   return `
 <div class="sticky-cta">
   <a class="btn btn--ghost" href="mailto:${esc(CONTACT.email)}" data-cta="sticky-email">Email us</a>
-  <a class="btn btn--primary" href="${esc(quoteHref(page))}" data-cta="sticky-quote">Get a quote</a>
+  <a class="btn btn--primary" href="${esc(quoteHref(page))}" data-cta="sticky-quote">Plan your move</a>
 </div>`;
 }
 
@@ -648,17 +655,15 @@ export function footer(page) {
       <ul>${map(group.links, (l) => `<li><a href="${esc(l.href)}">${esc(l.label)}</a></li>`)}</ul>
     </div>`;
   const phone = page.market ? CONTACT.phones[page.market] : null;
-  const logoRev = assetImg(LOGO_REVERSED);
 
   return `
 <footer class="site-footer">
   <div class="wrap">
     <div class="site-footer__grid">
       <div>
-        <div class="site-footer__logo">
-          <img src="${esc(logoRev.src)}" width="${logoRev.width}" height="${logoRev.height}"
-               alt="${esc(BRAND_ENTITY.name)}" loading="lazy">
-        </div>
+        <a class="site-footer__brand" href="/" aria-label="${esc(BRAND_ENTITY.name)}, ${esc(BRAND_ENTITY.endorsement)} — home">
+          ${brandLockup('site-footer__brand')}
+        </a>
         <p>${esc(BRAND_ENTITY.legalNote)}</p>
         <ul>
           <li><a href="mailto:${esc(CONTACT.email)}">${esc(CONTACT.email)}</a></li>
@@ -670,7 +675,8 @@ export function footer(page) {
     ${marketSwitcher(page, 'footer')}
     <div class="site-footer__legal">
       <p>
-        © ${new Date().getFullYear()} ${esc(BRAND_ENTITY.name)}.
+        © ${new Date().getFullYear()} ${esc(OPERATOR.name)}. ${esc(BRAND_ENTITY.name)} is a division of
+        <a href="${esc(OPERATOR.url)}">${esc(OPERATOR.name)} (${esc(OPERATOR.shortName)})</a>.
         <a href="/legal/">Legal and privacy</a>
       </p>
       <p>

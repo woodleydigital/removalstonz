@@ -24,6 +24,8 @@ export const caHome = {
   template: 'home',
   title: 'Moving to New Zealand from Canada | International Movers',
   h1: 'Moving to New Zealand from Canada',
+  eyebrow: 'International moving · Canada to New Zealand',
+  h1Accent: 'from Canada',
   lede:
     'International moving from anywhere in Canada to anywhere in New Zealand — from Vancouver, Calgary, Toronto, Montréal, Halifax and everywhere between, cleared through NZ biosecurity and delivered door to door.',
   description:

@@ -29,6 +29,8 @@ export const europeHome = {
   template: 'home',
   title: 'Removals to New Zealand from Europe and Ireland | International',
   h1: 'Removals to New Zealand from Europe',
+  eyebrow: 'Europe to New Zealand removals',
+  h1Accent: 'from Europe',
   lede:
     'International removals to New Zealand from Ireland, the Netherlands, Germany, France, Switzerland, Scandinavia and the rest of Europe — collected from your home, shipped from Europe\'s main ports and delivered to your door.',
   description:

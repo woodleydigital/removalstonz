@@ -13,16 +13,21 @@
  * the geometry. All ranges are PLANNING figures (docs/CONTENT-VERIFICATION.md,
  * V-06) and are confirmed against current schedules at quotation.
  *
- * Colours are the validated categorical set carried over unchanged from
- * removalstochina.com (dataviz six-checks, light mode, adjacent pairs):
- *   lightness band PASS · chroma floor PASS · CVD separation PASS ΔE 19.6
- *   normal-vision floor PASS ΔE 20.0 · contrast vs surface PASS
- * They are deliberately not recoloured to the brand teal: teal beside the sea
- * blue would weaken the adjacent-pair separation. Every segment is also
- * direct-labelled, so identity never depends on colour alone.
+ * Colours are the four IMC roles that carry a label legibly, ordered so each
+ * adjacent pair differs strongly in lightness — dark, mid, light, mid — which
+ * is the property that survives colour-vision deficiency on a stacked bar:
+ *   ink #142D3B (white label 14.3:1) · accent #167D8D (white 4.83:1)
+ *   light accent #A7D2CE (ink label 8.69:1) · slate #526572 (white 6.06:1)
+ * Following the IMC rule that colour never carries a state on its own, every
+ * segment is direct-labelled and the key beneath repeats each value in words.
  */
 
-const COLOURS = ['#3C7628', '#0B72AE', '#A55F0C', '#8A47A8'];
+const COLOURS = [
+  { colour: '#142D3B', ink: '#FFFFFF' },
+  { colour: '#167D8D', ink: '#FFFFFF' },
+  { colour: '#A7D2CE', ink: '#142D3B' },
+  { colour: '#526572', ink: '#FFFFFF' }
+];
 
 const stages = (origin, pack, sea, arrival, clearance) => [
   {
@@ -30,7 +35,8 @@ const stages = (origin, pack, sea, arrival, clearance) => [
     name: `Packing, collection and consolidation ${origin}`,
     range: pack[0],
     weeks: pack[1],
-    colour: COLOURS[0],
+    colour: COLOURS[0].colour,
+    ink: COLOURS[0].ink,
     note: pack[2]
   },
   {
@@ -38,7 +44,8 @@ const stages = (origin, pack, sea, arrival, clearance) => [
     name: 'Sea transit',
     range: sea[0],
     weeks: sea[1],
-    colour: COLOURS[1],
+    colour: COLOURS[1].colour,
+    ink: COLOURS[1].ink,
     note: sea[2]
   },
   {
@@ -46,7 +53,8 @@ const stages = (origin, pack, sea, arrival, clearance) => [
     name: 'Arrival and deconsolidation in New Zealand',
     range: arrival[0],
     weeks: arrival[1],
-    colour: COLOURS[2],
+    colour: COLOURS[2].colour,
+    ink: COLOURS[2].ink,
     note: arrival[2]
   },
   {
@@ -54,7 +62,8 @@ const stages = (origin, pack, sea, arrival, clearance) => [
     name: 'Customs, biosecurity and delivery',
     range: clearance[0],
     weeks: clearance[1],
-    colour: COLOURS[3],
+    colour: COLOURS[3].colour,
+    ink: COLOURS[3].ink,
     note: clearance[2]
   }
 ];

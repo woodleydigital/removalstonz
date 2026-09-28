@@ -291,21 +291,9 @@ async function build() {
   await mkdir(DIST, { recursive: true });
 
   // --- Assets, content-hashed so they can be cached immutably -------------
-  // Fonts first: they are content-hashed like everything else, and the CSS is
-  // rewritten to point at the hashed file before the CSS itself is hashed.
-  let cssRaw = await readFile(join(SRC, 'assets/css/main.css'), 'utf8');
-  const fonts = {};
-  await mkdir(join(DIST, 'fonts'), { recursive: true });
-  for (const name of await readdir(join(SRC, 'assets/fonts'))) {
-    if (!name.endsWith('.woff2')) continue;
-    const buf = await readFile(join(SRC, 'assets/fonts', name));
-    const hashed = `/fonts/${name.replace(/\.woff2$/, '')}.${hash(buf)}.woff2`;
-    await writeFile(join(DIST, hashed), buf);
-    fonts[name] = hashed;
-    cssRaw = cssRaw.split(`/fonts/${name}`).join(hashed);
-  }
-  // The licence travels with the font file (SIL OFL 1.1 requires it).
-  await copyFile(join(SRC, 'assets/fonts/OFL.txt'), join(DIST, 'fonts/OFL.txt'));
+  // The IMC identity uses system fonts only (Georgia and Arial), so there are
+  // no webfonts to hash or preload.
+  const cssRaw = await readFile(join(SRC, 'assets/css/main.css'), 'utf8');
   const css = minifyCss(cssRaw);
   const cssHash = hash(css);
   await mkdir(join(DIST, 'css'), { recursive: true });
@@ -324,7 +312,7 @@ async function build() {
   const imageManifest = await copyImages(join(SRC, 'assets/img'), join(DIST, 'img'));
   setAssetManifest(imageManifest);
 
-  const assets = { cssHash, jsHash, fonts };
+  const assets = { cssHash, jsHash };
 
   // --- International targeting --------------------------------------------
   // hreflang clusters are derived from the route map once, then attached to

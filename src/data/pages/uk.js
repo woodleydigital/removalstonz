@@ -36,6 +36,8 @@ export const ukHome = {
   template: 'home',
   title: 'Removals to New Zealand from the UK | Door-to-Door Moving',
   h1: 'Removals to New Zealand from the UK',
+  eyebrow: 'UK to New Zealand removals',
+  h1Accent: 'from the UK',
   lede:
     'International removals from anywhere in the UK to anywhere in New Zealand — household moves, part loads and full containers, packed for New Zealand biosecurity and delivered to your door.',
   description:
@@ -46,7 +48,7 @@ export const ukHome = {
   heroCta: { href: U.cost, label: 'See what it costs' },
   heroTrust: [
     '**Collection anywhere in mainland Britain** — Northern Ireland on request',
-    '**Door to door** — one written quote from your UK home to your New Zealand one',
+    '**One agreed plan, door to door** — from your UK home to your New Zealand one',
     '**Priced from volumes we publish** — so you can check the arithmetic'
   ],
   serviceCatalogue: [
