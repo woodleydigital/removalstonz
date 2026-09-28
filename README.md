@@ -86,12 +86,14 @@ src/
     components.js      Header, switcher, banner, localised lead form, calculator, blocks
     html.js assets.js  Helpers
   templates/           layout.js (the HTML shell) and page templates
-  assets/              CSS (NZ pounamu palette), JS, SVG logos
+  assets/              CSS, JS, SVG logos, Outfit heading font (OFL)
 scripts/
   build.mjs            Static build, sitemap with hreflang, llms.txt, robots.txt
   audit.mjs            Pre-publish quality gate, including international checks
   serve.mjs            Local preview server
+  brand/               Logo generator (logo.py) and raster renderer (raster.mjs)
 docs/
+  BRAND.md               Logo, palette, typeface and how to regenerate them
   INTERNATIONAL-SEO.md   How international targeting works and how to extend it
   CONTENT-VERIFICATION.md Pre-launch register and editorial rules
   LEAD-FORM.md           Field contract
@@ -134,18 +136,22 @@ expected for those pages.
 
 ## Brand
 
-Same layout and component system as removalstochina.com, recoloured for New
-Zealand: pounamu (greenstone) teal on near-black, with a silver-fern grey
-accent. The logo keeps the family's isometric crate with a route arrow
-curving south-east.
+A kiwi under the Southern Cross, standing on the swell of the voyage, with an
+outlined **removals / to NZ** wordmark in Outfit. The palette is sampled from
+New Zealand landscapes: Bay of Islands teal, Wakatipu night blue, Wānaka dusk
+and autumn-poplar gold. The layout and components are the same as
+removalstochina.com.
 
 | Token | Value | Note |
 |---|---|---|
-| `--brand` | `#12A58A` | Pounamu teal — marks and accents |
-| `--brand-deep` | `#0E7C66` | 5.1:1 on white |
-| `--brand-darker` | `#0A5F4F` | 7.6:1 on white — buttons and links |
-| `--accent` | `#7FD6C2` | On dark backgrounds, 10.9:1 on ink |
-| `--ink` | `#111517` | |
+| `--ink` | `#0C2233` | Wakatipu night |
+| `--brand-darker` | `#07566A` | Buttons and links, 8.2:1 on white |
+| `--brand-deep` | `#0A6C80` | 6.1:1 on white |
+| `--brand` | `#12A3B5` | Borders and marks only |
+| `--accent-2` | `#F2B233` | Poplar gold, on dark only |
+
+Full rationale, what was deliberately avoided (silver fern, koru) and how to
+regenerate the files: [`docs/BRAND.md`](docs/BRAND.md).
 
 ---
 

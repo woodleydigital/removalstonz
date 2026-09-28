@@ -10,7 +10,7 @@
 
 import { SITE_URL, OPERATOR, BRAND_ENTITY, OFFICES, CONTACT, AFFILIATIONS } from '../data/site.js';
 import { MARKETS, MARKET_ORDER, marketOf } from '../data/markets.js';
-import { asset } from './assets.js';
+import { asset, assetSize } from './assets.js';
 
 const abs = (path) => (path.startsWith('http') ? path : SITE_URL + path);
 
@@ -50,8 +50,7 @@ export function organisationGraph(page = {}) {
       '@id': `${SITE_URL}/#logo`,
       url: abs(logoPath),
       contentUrl: abs(logoPath),
-      width: 340,
-      height: 116,
+      ...(assetSize(BRAND_ENTITY.logo) || {}),
       caption: `${BRAND_ENTITY.name} logo`
     },
     image: { '@id': `${SITE_URL}/#logo` },

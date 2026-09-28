@@ -1,5 +1,5 @@
 import { esc, map, join, inline, slugify, fmtDate } from './html.js';
-import { asset, assetAnyExt } from './assets.js';
+import { asset, assetImg, assetAnyExt } from './assets.js';
 import { BRAND_ENTITY, CONTACT, AFFILIATIONS } from '../data/site.js';
 import { ITEM_GROUPS, LOAD_BANDS, CONTAINER_CAPACITY } from '../data/calculator.js';
 import { JOURNEYS, journeyShares } from '../data/journey.js';
@@ -55,13 +55,14 @@ export function header(page) {
     return `<li><a href="${esc(item.href)}"${current ? ' aria-current="page"' : ''}>${esc(item.label)}</a></li>`;
   };
   const home = page.market ? MARKETS[page.market].prefix : '/';
+  const logo = assetImg(LOGO);
   return `
 ${marketSwitcher(page, 'bar')}
 <header class="site-header">
   <div class="wrap">
     <div class="site-header__bar">
       <a class="site-header__logo" href="${esc(home)}" aria-label="${esc(BRAND_ENTITY.name)} — home">
-        <img src="${esc(asset(LOGO))}" width="340" height="116"
+        <img src="${esc(logo.src)}" width="${logo.width}" height="${logo.height}"
              alt="${esc(BRAND_ENTITY.name)}">
       </a>
       <span class="site-header__spacer"></span>
@@ -647,6 +648,7 @@ export function footer(page) {
       <ul>${map(group.links, (l) => `<li><a href="${esc(l.href)}">${esc(l.label)}</a></li>`)}</ul>
     </div>`;
   const phone = page.market ? CONTACT.phones[page.market] : null;
+  const logoRev = assetImg(LOGO_REVERSED);
 
   return `
 <footer class="site-footer">
@@ -654,7 +656,7 @@ export function footer(page) {
     <div class="site-footer__grid">
       <div>
         <div class="site-footer__logo">
-          <img src="${esc(asset(LOGO_REVERSED))}" width="340" height="116"
+          <img src="${esc(logoRev.src)}" width="${logoRev.width}" height="${logoRev.height}"
                alt="${esc(BRAND_ENTITY.name)}" loading="lazy">
         </div>
         <p>${esc(BRAND_ENTITY.legalNote)}</p>

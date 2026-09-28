@@ -43,6 +43,7 @@ export function layout(page, bodyHtml, assets) {
 <meta name="robots" content="${robots}">
 ${map(alternates, (a) => `<link rel="alternate" hreflang="${esc(a.hreflang)}" href="${esc(a.href)}">`)}
 
+<link rel="preload" href="${assets.fonts['outfit-latin-700.woff2']}" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/main.${assets.cssHash}.css">
 <!-- Sole inline script, and deliberately so. The lead form ships all five
      steps in the HTML because it must work without JavaScript; app.js then
@@ -53,7 +54,7 @@ ${map(alternates, (a) => `<link rel="alternate" hreflang="${esc(a.hreflang)}" hr
 <script data-critical>document.documentElement.className+=" pre-step";addEventListener("load",function(){if(!document.querySelector('.lead[data-enhanced="true"]'))document.documentElement.classList.remove("pre-step")})</script>
 ${favicon ? `<link rel="icon" href="${favicon}" type="image/svg+xml">` : ''}
 ${touchIcon ? `<link rel="apple-touch-icon" href="${touchIcon}">` : ''}
-<meta name="theme-color" content="#111517">
+<meta name="theme-color" content="#0C2233">
 
 <meta property="og:type" content="${page.template === 'guide' ? 'article' : 'website'}">
 <meta property="og:site_name" content="${esc(BRAND_ENTITY.name)}">

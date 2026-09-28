@@ -18,8 +18,8 @@ editorial rules that keep the site honest.
 | **V-05** | **Data-protection position** | `/legal/` | The page names the laws a reader may have rights under (UK GDPR, EU GDPR, Australian Privacy Act, PIPEDA, NZ Privacy Act 2020, US state laws) and promises the controller's details before launch. Which obligations actually attach — lawful basis, retention, international transfers to NZ and to origin partners — is for the operator's advisers once V-01 is known. |
 | **V-06** | **Transit planning ranges** | `src/data/journey.js`, market pages | Door-to-door ranges (UK and Europe 10–16 weeks, US 8–14, Canada 8–15, Australia 4–8) and ocean legs are industry planning figures, not the operator's measured data. Confirm against the operator's current sailings. If one changes, update `journey.js` and grep the pages for the old range. |
 | **V-07** | **Calculator inventory** | `src/data/calculator.js` | Reused from removalstochina.com (the client's own survey inventory, originally in AU/NZ trade terms). Confirm the NZ operator is content to publish it, or supply their own. |
-| **V-08** | **Open Graph image** | `layout.js` → `ogImage` | `/img/og-default.png` does not exist yet. Add a 1200×630 image to `src/assets/img/` and social shares pick it up; until then no `og:image` is emitted. An `apple-touch-icon.png` (180×180) is likewise optional and picked up if added. |
-| **V-09** | **Logo text outlining** | `src/assets/img/*.svg` | The wordmark uses a live font stack, so it renders slightly differently across machines. A designer should outline the text for production. |
+| ~~V-08~~ | ~~Open Graph image~~ | `src/assets/img/og-default.png` | **Resolved.** A 1200×630 sharing image and a 180×180 `apple-touch-icon.png` are generated from the brand by `scripts/brand/raster.mjs`. Replace `og-default.png` with a photographic version any time; the build picks it up. |
+| ~~V-09~~ | ~~Logo text outlining~~ | `src/assets/img/*.svg` | **Resolved.** The wordmark is Outfit (SIL OFL 1.1), converted to outlines by `scripts/brand/logo.py`. See [`BRAND.md`](./BRAND.md). |
 | **V-10** | **Customs and biosecurity statements** | `/guides/new-zealand-customs-personal-effects/`, `/guides/new-zealand-biosecurity-what-you-cannot-bring/` | Written to the framework published by NZ Customs and MPI, without thresholds. Two statements should be confirmed against current guidance at launch: that Customs generally expects the owner to have arrived before unaccompanied goods clear, and the scope and season of MPI's brown marmorated stink bug measures (referred to on the US and Europe pages). |
 | **V-11** | **Left-hand-drive vehicles** | US, Canada and Europe pages | The pages say LHD vehicles "face restrictions" and tell readers to check with NZTA Waka Kotahi, without stating the rules. Keep it that way unless the operator wants to publish specifics with a source. |
 
@@ -60,8 +60,8 @@ genuine local detail where it exists — never a swapped city name.
 ### B5. The journey chart is validated, not eyeballed
 
 `journey.js` uses the categorical palette validated for removalstochina.com
-(`#3C7628, #0B72AE, #A55F0C, #8A47A8`), deliberately not recoloured to the brand
-teal, which would sit too close to the sea-transit blue. Every segment is
+(`#3C7628, #0B72AE, #A55F0C, #8A47A8`), deliberately not recoloured to the
+brand blues, which would sit too close to the sea-transit blue. Every segment is
 direct-labelled. Re-validate before changing any colour.
 
 ### B6. Market pages must stay distinct

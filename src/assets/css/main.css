@@ -1,28 +1,42 @@
 /* ==========================================================================
    Removals to NZ — design system
-   Mobile-first. No framework, no runtime CSS. Palette derived from the
-   NZ pounamu (greenstone) teal on near-black, with a silver-fern grey accent.
+   Mobile-first. No framework, no runtime CSS. Palette sampled from New Zealand
+   landscapes — see docs/BRAND.md: Bay of Islands teal, Wakatipu night blue,
+   Wānaka dusk and the gold of Wānaka's autumn poplars.
    ========================================================================== */
+
+/* Outfit — the logo's typeface — for headings only. Self-hosted, one weight,
+   preloaded. `optional` means a slow connection keeps the fallback for that
+   page view instead of swapping late, so the font can never cause a layout
+   shift. Licence: src/assets/fonts/OFL.txt. */
+@font-face {
+  font-family: "Outfit";
+  src: url("/fonts/outfit-latin-700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: optional;
+}
 
 :root {
   /* Brand */
-  --brand: #12a58a; /* pounamu */
-  --brand-deep: #0e7c66; /* 5.1:1 on white */
-  --brand-darker: #0a5f4f; /* 7.6:1 on white */
-  --brand-tint: #e8f5f1;
-  --brand-tint-2: #cfeae2;
-  --accent-2: #9fb8b3; /* silver fern grey */
-  --accent: #7fd6c2;
+  --brand: #12a3b5;        /* Bay of Islands shallows — marks, borders, bars (3:1 on white; never text) */
+  --brand-deep: #0a6c80;   /* Bay of Islands deep — 6.1:1 on white */
+  --brand-darker: #07566a; /* 8.2:1 on white — buttons and links */
+  --brand-tint: #e7f5f8;
+  --brand-tint-2: #cbeaf0;
+  --accent: #7fdce6;       /* teal on dark — 10.3:1 on night */
+  --accent-2: #f2b233;     /* Wānaka poplar gold — 8.7:1 on night; decorative on light */
+  --dusk: #3a3470;         /* Wānaka at dusk */
 
-  /* Neutrals */
-  --ink: #111517;
-  --ink-2: #2a3033;
-  --slate: #4b5457;
-  --muted: #667075;
-  --line: #dfe4e6;
-  --line-soft: #edf0f1;
+  /* Neutrals — cool, lake-tinted */
+  --ink: #0c2233;          /* Wakatipu at night */
+  --ink-2: #1e3445;
+  --slate: #45596a;
+  --muted: #5b6b78;        /* 5.5:1 on white */
+  --line: #dce4ea;
+  --line-soft: #edf2f5;
   --paper: #ffffff;
-  --paper-2: #f6f8f8;
+  --paper-2: #f4f7fa;      /* alpine mist */
 
   /* Signal */
   --amber-bg: #fff8e6;
@@ -32,7 +46,7 @@
   /* Type */
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
     Arial, sans-serif;
-  --font-display: "Trebuchet MS", "Segoe UI", -apple-system, Arial, sans-serif;
+  --font-display: "Outfit", "Segoe UI", -apple-system, BlinkMacSystemFont, Arial, sans-serif;
 
   /* Space + shape */
   --gap: 1rem;
@@ -82,8 +96,8 @@ a:hover { color: var(--ink); }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  line-height: 1.18;
-  letter-spacing: -0.015em;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
   margin: 0 0 .6em;
   color: var(--ink);
   text-wrap: balance;
@@ -200,11 +214,11 @@ small { font-size: .875rem; }
   cursor: pointer; min-height: 48px; transition: background-color .15s, color .15s, border-color .15s;
 }
 .btn--primary { background: var(--brand-darker); color: #fff; } /* 5.5:1 on white */
-.btn--primary:hover { background: #084c40; color: #fff; }
+.btn--primary:hover { background: #04404f; color: #fff; }
 .btn--ghost { background: #fff; color: var(--ink); border-color: var(--line); }
 .btn--ghost:hover { border-color: var(--ink); color: var(--ink); }
-.btn--onDark { background: var(--brand); color: var(--ink); }
-.btn--onDark:hover { background: var(--accent); color: var(--ink); }
+.btn--onDark { background: var(--accent-2); color: var(--ink); }
+.btn--onDark:hover { background: #f7c65c; color: var(--ink); }
 .btn--block { display: flex; width: 100%; }
 .btn--lg { font-size: 1.05rem; padding: 1rem 1.6rem; min-height: 54px; }
 
@@ -226,12 +240,24 @@ small { font-size: .875rem; }
 
 /* ---------- Hero ---------- */
 .hero {
-  background: linear-gradient(168deg, #12181a 0%, #12211f 58%, #123028 100%);
+  background:
+    radial-gradient(ellipse 60% 70% at 88% 0%, rgba(127, 111, 199, .35), transparent 70%),
+    linear-gradient(170deg, #0c2233 0%, #172a4f 55%, #3a3470 100%);
   color: #fff;
   padding-block: 1.5rem 2.25rem;
 }
+/* The Southern Cross from the logo, faint in the dusk sky. Decorative only. */
+.hero { position: relative; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; pointer-events: none;
+  top: 1.25rem; right: 4%; width: 72px; height: 90px; opacity: .6;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 150' fill='%23f2b233'%3E%3Cpath transform='translate(48 0) scale(.9)' d='M12 0l2.8 8.6h9L16.5 14l2.8 8.6L12 17.3 4.7 22.6 7.5 14 .2 8.6h9Z'/%3E%3Cpath transform='translate(52 110) scale(1.05)' d='M12 0l2.8 8.6h9L16.5 14l2.8 8.6L12 17.3 4.7 22.6 7.5 14 .2 8.6h9Z'/%3E%3Cpath transform='translate(0 60) scale(.85)' d='M12 0l2.8 8.6h9L16.5 14l2.8 8.6L12 17.3 4.7 22.6 7.5 14 .2 8.6h9Z'/%3E%3Cpath transform='translate(92 44) scale(.7)' d='M12 0l2.8 8.6h9L16.5 14l2.8 8.6L12 17.3 4.7 22.6 7.5 14 .2 8.6h9Z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.hero > .wrap { position: relative; }
+@media (max-width: 699px) { .hero::before { display: none; } }
+@media (min-width: 980px) { .hero::before { right: auto; left: 47%; top: 2.25rem; width: 88px; height: 110px; } }
 .hero h1 { color: #fff; margin-bottom: .5rem; font-size: clamp(1.7rem, 5.6vw, 3rem); }
-.hero__lede { font-size: 1.03rem; color: #d7dedf; max-width: 46ch; margin-bottom: 1.15rem; }
+.hero__lede { font-size: 1.03rem; color: #d5e0ea; max-width: 46ch; margin-bottom: 1.15rem; }
 @media (min-width: 700px) { .hero__lede { font-size: 1.1rem; } }
 .hero__grid { display: grid; gap: 1.5rem; }
 @media (min-width: 980px) {
@@ -249,11 +275,11 @@ small { font-size: .875rem; }
 .hero__trust { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
 .hero__trust li {
   position: relative; padding-left: 1.75rem;
-  font-size: .95rem; color: #e6ecec; margin: 0;
+  font-size: .95rem; color: #e8eff5; margin: 0;
 }
 .hero__trust li::before {
   content: ""; position: absolute; left: 0; top: .28rem; width: 20px; height: 20px;
-  background: var(--brand); border-radius: 50%;
+  background: var(--accent-2); border-radius: 50%;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9.6 16.6 5 12l1.4-1.4 3.2 3.2 8-8L19 7.2Z'/%3E%3C/svg%3E") center/16px no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9.6 16.6 5 12l1.4-1.4 3.2 3.2 8-8L19 7.2Z'/%3E%3C/svg%3E") center/16px no-repeat;
 }
@@ -479,7 +505,7 @@ html.pre-step .lead:not([data-enhanced="true"]) .step ~ .step { display: none; }
   padding: 1rem 1.1rem; display: grid; gap: .2rem;
 }
 .calc__out b { font-size: 1.9rem; font-family: var(--font-display); line-height: 1.1; }
-.calc__out span { font-size: .88rem; color: #c9d1d1; }
+.calc__out span { font-size: .88rem; color: #c3d0da; }
 .calc__noscript { font-size: .93rem; }
 
 /* ---------- Affiliations ---------- */
@@ -622,7 +648,7 @@ html.pre-step .lead:not([data-enhanced="true"]) .step ~ .step { display: none; }
 @media (min-width: 1000px) { .sticky-cta { display: none; } }
 
 /* ---------- Footer ---------- */
-.site-footer { background: var(--ink); color: #c9d1d1; padding-block: 2.5rem 1.5rem; margin-top: 3rem; }
+.site-footer { background: var(--ink); color: #c3d0da; padding-block: 2.5rem 1.5rem; margin-top: 3rem; }
 .site-footer a { color: #fff; text-decoration: none; }
 .site-footer a:hover { color: var(--accent); text-decoration: underline; }
 .site-footer h2 { color: #fff; font-size: .82rem; text-transform: uppercase; letter-spacing: .09em; margin: 0 0 .7rem; }
@@ -632,14 +658,14 @@ html.pre-step .lead:not([data-enhanced="true"]) .step ~ .step { display: none; }
 .site-footer__grid { display: grid; gap: 1.75rem; }
 @media (min-width: 760px) { .site-footer__grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; } }
 .site-footer__legal {
-  border-top: 1px solid #2c3437; margin-top: 2rem; padding-top: 1.1rem;
-  font-size: .84rem; color: #98a2a4; display: grid; gap: .5rem;
+  border-top: 1px solid #1f3a4f; margin-top: 2rem; padding-top: 1.1rem;
+  font-size: .84rem; color: #9fb0bd; display: grid; gap: .5rem;
 }
 .site-footer__legal p { margin: 0; }
 /* Underlined, not merely lighter: at .84rem the colour difference against the
    surrounding text is 1.68:1, well under the 3:1 a link needs to stand out on
    colour alone. */
-.site-footer__legal a { color: #e6ecec; text-decoration: underline; }
+.site-footer__legal a { color: #e8eff5; text-decoration: underline; }
 
 /* ---------- Utility ---------- */
 .visually-hidden {
@@ -661,28 +687,28 @@ html.pre-step .lead:not([data-enhanced="true"]) .step ~ .step { display: none; }
 .market-switch li { margin: 0; }
 .market-switch a { text-decoration: none; font-weight: 600; display: inline-block; padding: .3rem 0; }
 .market-switch a[aria-current="true"] { text-decoration: underline; text-underline-offset: .25em; }
-.market-switch--bar { background: var(--ink); color: #c9d1d1; }
+.market-switch--bar { background: var(--ink); color: #c3d0da; }
 .market-switch--bar .wrap { min-height: 34px; }
-.market-switch--bar .market-switch__label { color: #98a2a4; }
-.market-switch--bar a { color: #e6ecec; }
+.market-switch--bar .market-switch__label { color: #9fb0bd; }
+.market-switch--bar a { color: #e8eff5; }
 .market-switch--bar a:hover, .market-switch--bar a[aria-current="true"] { color: var(--accent); }
-.market-switch--footer { border-top: 1px solid #2c3437; margin-top: 2rem; padding-top: 1rem; }
+.market-switch--footer { border-top: 1px solid #1f3a4f; margin-top: 2rem; padding-top: 1rem; }
 .market-switch--footer .wrap { padding-inline: 0; }
-.market-switch--footer .market-switch__label { color: #98a2a4; }
+.market-switch--footer .market-switch__label { color: #9fb0bd; }
 
 /* ---------- Market suggestion banner (filled by app.js) ---------- */
 .market-banner {
   position: fixed; z-index: 60; left: 1rem; right: 1rem; bottom: 5.25rem;
   max-width: 30rem; margin-inline: auto;
   display: flex; align-items: flex-start; gap: .75rem;
-  background: var(--ink); color: #e6ecec; border-radius: var(--radius);
+  background: var(--ink); color: #e8eff5; border-radius: var(--radius);
   padding: .85rem 1rem; box-shadow: var(--shadow-lg); font-size: .95rem;
 }
 .market-banner[hidden] { display: none; }
 .market-banner p { margin: 0; flex: 1; }
 .market-banner a { color: var(--accent); font-weight: 700; }
 .market-banner__close {
-  flex: none; background: none; border: 0; color: #e6ecec; font-size: 1.4rem; line-height: 1;
+  flex: none; background: none; border: 0; color: #e8eff5; font-size: 1.4rem; line-height: 1;
   cursor: pointer; min-width: 32px; min-height: 32px;
 }
 @media (min-width: 1000px) { .market-banner { bottom: 1.25rem; left: auto; right: 1.25rem; margin: 0; } }

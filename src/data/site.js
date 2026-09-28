@@ -24,13 +24,15 @@
  */
 export const SITE_URL = 'https://removalstonz.com';
 
-/** Brand palette: NZ pounamu (greenstone) teal on near-black. See main.css. */
+/** Brand palette, sampled from New Zealand landscapes. See docs/BRAND.md. */
 export const BRAND = {
-  brand: '#12A58A',
-  brandDeep: '#0E7C66', // 5.1:1 on white
-  brandDarker: '#0A5F4F', // 7.6:1 on white
-  accent: '#7FD6C2',
-  ink: '#111517'
+  ink: '#0C2233', // Wakatipu night
+  brandDarker: '#07566A', // Bay of Islands deep — 8.2:1 on white
+  brandDeep: '#0A6C80', // 6.1:1 on white
+  brand: '#12A3B5', // Bay of Islands shallows
+  accent: '#7FDCE6',
+  gold: '#F2B233', // Wānaka poplars
+  dusk: '#3A3470' // Wānaka at dusk
 };
 
 /**

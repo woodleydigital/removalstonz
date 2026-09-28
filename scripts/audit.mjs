@@ -440,7 +440,7 @@ async function audit() {
   for (const doc of docs) {
     for (const link of doc.links || []) {
       const target = link.endsWith('/') || link.includes('.') ? link : link + '/';
-      if (link.startsWith('/css/') || link.startsWith('/js/') || link.startsWith('/img/')) continue;
+      if (/^\/(css|js|img|fonts)\//.test(link)) continue;
       if (link === '/robots.txt' || link === '/sitemap.xml' || link === '/llms.txt') continue;
       if (!known.has(target)) {
         fail(doc.path, 'broken-link', `Links to ${link}, which does not exist`);
